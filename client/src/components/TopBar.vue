@@ -22,9 +22,7 @@ const switchTheme = () => {
 
 <template>
   <div class="w-full h-24 dark:bg-ChatDarkBGPrimary bg-ChatLightBGPrimary">
-    <div
-      class="flex justify-between text-white items-center h-full w-full px-10"
-    >
+    <div class="flex justify-between items-center h-full w-full px-10">
       <section>
         <RouterLink
           :to="{ name: 'Home' }"

@@ -6,7 +6,7 @@ import { RouterLink } from 'vue-router';
     class="flex-col gap-10 size-full flex items-center justify-center dark:bg-ChatDarkBGSecondary bg-ChatLightBGSecondary"
   >
     <h1
-      class="text-5xl font-bold dark:text-ChatDarkAccentPrimary text-ChatLightAccentPrimary"
+      class="text-5xl font-bold text-center dark:text-ChatDarkAccentPrimary text-ChatLightAccentPrimary"
     >
       Welcome to
       <span
