@@ -1,6 +1,6 @@
 <script setup></script>
 <template>
   <div
-    class="hidden lg:inline-block bg-ChatLightBGPrimary dark:bg-ChatDarkBGPrimary h-full w-1/6"
+    class="hidden h-full w-1/6 bg-ChatLightBGPrimary lg:inline-block dark:bg-ChatDarkBGPrimary"
   ></div>
 </template>

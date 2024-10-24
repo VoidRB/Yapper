@@ -1,6 +1,6 @@
 <script setup>
-import ChatsBar from '@/components/ChatsBar.vue';
-import ChattingSpace from '@/components/ChattingSpace.vue';
+import ChatsBar from "@/components/ChatsBar.vue";
+import ChattingSpace from "@/components/ChattingSpace.vue";
 </script>
 
 <template>

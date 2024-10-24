@@ -1,4 +1,4 @@
-import { Context } from "@oak/oak";
+import { Context } from '@oak/oak';
 
 type WebSocketWithUsername = WebSocket & { username: string };
 type AppEvent = { event: string; [key: string]: any };
@@ -8,7 +8,7 @@ export default class ChatServer {
 
   public async handleConnection(ctx: Context) {
     const socket = (await ctx.upgrade()) as WebSocketWithUsername;
-    const username = ctx.request.url.searchParams.get("username");
+    const username = ctx.request.url.searchParams.get('username');
 
     if (this.connectedClients.has(username)) {
       socket.close(1008, `Username ${username} is already taken`);
@@ -30,12 +30,12 @@ export default class ChatServer {
 
   private send(username: string, message: any) {
     const data = JSON.parse(message.data);
-    if (data.event !== "send-message") {
+    if (data.event !== 'send-message') {
       return;
     }
 
     this.broadcast({
-      event: "send-message",
+      event: 'send-message',
       username: username,
       message: data.message,
     });
@@ -50,9 +50,9 @@ export default class ChatServer {
 
   private broadcastUsernames() {
     const usernames = [...this.connectedClients.keys()];
-    this.broadcast({ event: "update-users", usernames });
+    this.broadcast({ event: 'update-users', usernames });
 
-    console.log("Sent username list:", JSON.stringify(usernames));
+    console.log('Sent username list:', JSON.stringify(usernames));
   }
 
   private broadcast(message: AppEvent) {

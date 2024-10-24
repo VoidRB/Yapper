@@ -1,47 +1,50 @@
 <script setup>
-import { ref } from 'vue';
-import { RouterLink } from 'vue-router';
+import { ref } from "vue";
+import { RouterLink } from "vue-router";
 
 const theme = ref(Boolean);
 
 const switchTheme = () => {
-  let themeState = JSON.parse(localStorage.getItem('theme'));
+  let themeState = JSON.parse(localStorage.getItem("theme"));
   if (themeState === true) {
-    document.body.classList.add('dark');
+    document.body.classList.add("dark");
     theme.value = !theme.value;
-    JSON.stringify(localStorage.setItem('theme', theme.value));
-    console.log('To DarkMode');
+    JSON.stringify(localStorage.setItem("theme", theme.value));
+    console.log("To DarkMode");
   } else {
-    document.body.classList.remove('dark');
+    document.body.classList.remove("dark");
     theme.value = !theme.value;
-    JSON.stringify(localStorage.setItem('theme', theme.value));
-    console.log('To LightMode');
+    JSON.stringify(localStorage.setItem("theme", theme.value));
+    console.log("To LightMode");
   }
 };
 </script>
 
 <template>
-  <div class="w-full h-24 dark:bg-ChatDarkBGPrimary bg-ChatLightBGPrimary">
-    <div class="flex justify-between items-center h-full w-full px-10">
+  <div
+    class="h-24 w-full bg-ChatLightBGPrimary antialiased dark:bg-ChatDarkBGPrimary"
+  >
+    <div class="flex h-full w-full items-center justify-between px-10">
       <section>
         <RouterLink
           :to="{ name: 'Home' }"
-          class="md:ml-12 font-bold text-2xl hover:dark:text-ChatDarkAccentSecondary hover:text-ChatLightAccentSecondary dark:text-ChatDarkAccentPrimary text-ChatLightAccentPrimary"
+          class="text-2xl font-bold text-ChatLightAccentPrimary drop-shadow-sm hover:text-ChatLightAccentSecondary focus:underline focus:outline-none md:ml-12 dark:text-ChatDarkAccentPrimary hover:dark:text-ChatDarkAccentSecondary"
         >
           Yapper
         </RouterLink>
       </section>
-      <section class="flex gap-4 justify-center items-center">
+      <section class="flex items-center justify-center gap-4">
         <button
-          class="hover:dark:text-ChatDarkAccentSecondary hover:text-ChatLightAccentSecondary dark:text-ChatDarkAccentPrimary text-ChatLightAccentPrimary"
+          class="text-ChatLightAccentPrimary hover:text-ChatLightAccentSecondary focus:underline focus:outline-none dark:text-ChatDarkAccentPrimary hover:dark:text-ChatDarkAccentSecondary"
           @click="switchTheme"
         >
           Switch Mode
         </button>
         <RouterLink
           :to="{ name: 'Profile' }"
-          class="ring-2 hover:shadow-2xl shadow-black hover:size-11 transition-all rounded-full size-10 cursor-pointer hover:ring-ChatLightAccentSecondary dark:ring-ChatDarkAccentPrimary ring-ChatLightAccentPrimary hover:dark:ring-ChatDarkAccentSecondary"
-        ></RouterLink>
+          class="flex size-10 cursor-pointer items-center justify-center rounded-full text-ChatLightAccentPrimary shadow-black ring-2 ring-ChatLightAccentPrimary transition-all hover:size-11 hover:text-ChatLightAccentSecondary hover:shadow-2xl hover:ring-ChatLightAccentSecondary focus:outline-none focus:ring-ChatLightAccentSecondary active:text-ChatLightAccentSecondary dark:text-ChatDarkAccentPrimary dark:ring-ChatDarkAccentPrimary hover:dark:text-ChatDarkAccentSecondary hover:dark:ring-ChatDarkAccentSecondary focus:dark:ring-ChatDarkAccentSecondary active:dark:text-ChatDarkAccentSecondary"
+          >P</RouterLink
+        >
       </section>
     </div>
   </div>
