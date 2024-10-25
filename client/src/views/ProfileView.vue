@@ -1,7 +1,7 @@
 <script setup></script>
 <template>
   <div
-    class="flex h-full w-full items-center justify-center bg-ChatLightBGSecondary text-5xl text-ChatLightAccentSecondary dark:bg-ChatDarkBGSecondary dark:text-ChatDarkAccentSecondary"
+    class="dark:bg-CDBGSecondary dark:text-CDACCSecondary bg-CLBGSecondary text-CLACCSecondary flex h-full w-full items-center justify-center text-5xl"
   >
     Profile
   </div>

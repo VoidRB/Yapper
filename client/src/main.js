@@ -16,12 +16,8 @@ if (localStorage.getItem("theme")) {
 
   if (themestate === true) {
     document.body.classList.remove("dark");
-    console.log(themestate);
-    console.log(`Light Theme`);
   } else {
     document.body.classList.add("dark");
-    console.log(themestate);
-    console.log(`Dark Theme`);
   }
 } else {
   localStorage.setItem("theme", "true");

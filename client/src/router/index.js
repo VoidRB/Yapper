@@ -1,48 +1,48 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import HomeView from '../views/HomeView.vue';
+import { createRouter, createWebHistory } from "vue-router";
+import HomeView from "../views/HomeView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'Home',
+      path: "/",
+      name: "Home",
       component: HomeView,
       meta: {
-        title: 'Home',
+        title: "Home",
       },
     },
     {
-      path: '/chats',
-      name: 'Chats',
-      component: () => import('@/views/ChatView.vue'),
+      path: "/chats/:username",
+      name: "Chats",
+      component: () => import("@/views/ChatView.vue"),
       meta: {
-        title: 'Chats',
+        title: "Chats",
       },
     },
     {
-      path: '/profile',
-      name: 'Profile',
-      component: () => import('@/views/ProfileView.vue'),
+      path: "/profile",
+      name: "Profile",
+      component: () => import("@/views/ProfileView.vue"),
       meta: {
-        title: 'Profile',
+        title: "Profile",
       },
     },
     {
-      path: '/colors',
-      name: 'colors',
+      path: "/colors",
+      name: "colors",
       meta: {
-        title: 'colors',
+        title: "colors",
       },
-      component: () => import('@/views/ColorsView.vue'),
+      component: () => import("@/views/ColorsView.vue"),
     },
     {
-      path: '/:catchall(.*)',
-      name: 'notFound',
+      path: "/:catchall(.*)",
+      name: "notFound",
       meta: {
-        title: '404 Not Found',
+        title: "404 Not Found",
       },
-      component: () => import('@/views/NotFoundView.vue'),
+      component: () => import("@/views/NotFoundView.vue"),
     },
   ],
 });
