@@ -1,21 +1,21 @@
 // deno-lint-ignore-file no-explicit-any
-import { Application, Context, Router } from '@oak/oak';
-import ChatServer from './ChatServer.ts';
+import { WebSocketServer } from 'ws';
 
-const app = new Application();
-const port: any = Deno.env.get('PORT');
-const router = new Router();
-const server = new ChatServer();
+const port = Deno.env.get('PORT');
 
-router.get('/start_web_socket', (ctx: Context) => server.handleConnection(ctx));
-router.get('/', (ctx: Context) => {
-  ctx.response.body = { test: 'test' };
+const server = new WebSocketServer({ port: port });
+
+server.on('open', (server: any) => {
+  console.log(`Running on ${port}`);
+  server.on('message', (data: any) => {
+    server.send(data);
+  });
 });
 
-app.use(router.routes(), router.allowedMethods());
-app.use(async (context) => {
-  await context.send({ root: Deno.cwd(), index: 'Public/Index.html' });
+server.on('connection', (server: any) => {
+  console.log(`User Connected to the server`);
 });
 
-console.log(`Server running on ${port}`);
-await app.listen({ port });
+server.on('close', () => {
+  console.log(`Closed Server`);
+});
