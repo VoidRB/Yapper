@@ -1,8 +1,16 @@
 {
   "tasks": {
-    "dev": "deno run -NER --env-file --watch main.ts"
+    "migrate": "deno run -A --unstable npm:prisma migrate dev --name init",
+    "generate": "deno run -A --unstable npm:prisma generate",
+    "dev": "deno run -A --env-file --watch src/server.ts"
   },
+  "nodeModulesDir": "auto",
   "imports": {
-    "ws": "npm:ws@^8.18.0"
+    "@prisma/client": "npm:@prisma/client@^5.21.1",
+    "@std/crypto": "jsr:@std/crypto@^1.0.3",
+    "@std/url": "jsr:@std/url@^0.225.1",
+    "bcrypt": "npm:bcrypt@^5.1.1",
+    "djwt": "npm:djwt@^1.1.0",
+    "prisma": "npm:prisma@^5.21.1"
   }
 }
