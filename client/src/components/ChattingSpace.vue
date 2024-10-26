@@ -1,22 +1,43 @@
 <script setup>
 import { ref } from "vue";
 
-const webSocket = new WebSocket("ws://localhost:5005", []);
+const webSocket = new WebSocket(`ws://localhost:5005/`);
 
 const inputText = ref("");
 
+const texts = ref([]);
+
 const SendMessage = () => {
-  webSocket.send("test from the front end");
+  if (inputText.value === "") {
+  } else {
+    webSocket.send(`${inputText.value}`);
+    console.log(`Sent ${inputText.value}`);
+  }
+};
+
+webSocket.onmessage = (event) => {
+  texts.value.push(event.data);
 };
 </script>
 <template>
   <div
     class="flex h-full w-full flex-col justify-between border-2 border-CLACCPrimary bg-CLBGSecondary shadow-inner shadow-black lg:w-5/6 dark:border-CDACCPrimary dark:bg-CDBGSecondary"
   >
-    <section class="h-full w-full"></section>
+    <section
+      class="my-2 flex max-h-full w-full flex-col gap-1 overflow-y-scroll [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+    >
+      <h1
+        class="mx-2 w-1/2 text-wrap bg-CLACCSecondary p-4 text-white dark:bg-CDACCSecondary"
+        v-for="text in texts"
+      >
+        {{ text }}
+      </h1>
+    </section>
     <section class="my-5 flex w-full items-center justify-center">
       <div class="w-full px-10">
         <input
+          @keypress.enter="SendMessage(inputText)"
+          @keyup.enter="inputText = ''"
           v-model="inputText"
           autofocus
           type="text"

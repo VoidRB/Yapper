@@ -5,15 +5,15 @@ const port = Deno.env.get('PORT');
 
 const server = new WebSocketServer({ port: port });
 
-server.on('open', (server: any) => {
-  console.log(`Running on ${port}`);
-  server.on('message', (data: any) => {
-    server.send(data);
-  });
-});
+const texts: Array<string> = [];
 
 server.on('connection', (server: any) => {
-  console.log(`User Connected to the server`);
+  console.log(`Running on ${port}`);
+  server.on('message', (data: any) => {
+    console.log(`Received : ${data}`);
+    texts.push(data);
+    server.send(data.toString());
+  });
 });
 
 server.on('close', () => {

@@ -13,7 +13,7 @@ const router = createRouter({
       },
     },
     {
-      path: "/chats/:username",
+      path: "/chats",
       name: "Chats",
       component: () => import("@/views/ChatView.vue"),
       meta: {
