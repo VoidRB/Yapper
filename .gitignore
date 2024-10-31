@@ -33,3 +33,4 @@ coverage
 **/generated/**
 *.db
 *.db-journal
+**/*.sqlite3

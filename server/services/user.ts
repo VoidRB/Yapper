@@ -1,25 +1,29 @@
-import { prisma } from "../db/prisma.ts"
+import { db } from "../db/index.ts"
 
 export class UserService {
 	constructor() { }
 
 	async getUser(id: number) {
-		return prisma.user.findUniqueOrThrow({
-			where: { id }
-		})
+		return db.selectFrom('user')
+			.where('id', '=', id)
+			.selectAll()
+			.executeTakeFirstOrThrow()
 	}
 
 	async getUserByEmail(email: string) {
-		return prisma.user.findUniqueOrThrow({
-			where: { email }
-		})
+		return db.selectFrom('user')
+			.where('email', '=', email)
+			.selectAll()
+			.executeTakeFirstOrThrow()
 	}
 
 	async getUsers() {
-		return prisma.user.findMany()
+		return db.selectFrom('user')
+			.selectAll()
+			.execute()
 	}
 
 	async createUser(data: { email: string, passwordHash: string }) {
-		return prisma.user.create({ data })
+		return db.insertInto('user').values(data).executeTakeFirstOrThrow()
 	}
 }

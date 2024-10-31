@@ -1,19 +1,22 @@
-import { prisma } from "../db/prisma.ts"
+import { db } from "../db/index.ts"
 
 export class SessionService {
 	constructor() { }
 
 	async getSession(id: number) {
-		return prisma.session.findUniqueOrThrow({
-			where: { id }
-		})
+		return db.selectFrom('session')
+			.where('id', '=', id)
+			.selectAll()
+			.executeTakeFirstOrThrow()
 	}
 
 	async getSessions() {
-		return prisma.session.findMany()
+		return db.selectFrom('session')
+			.selectAll()
+			.execute()
 	}
 
 	async createSession(data: { ip: string, userAgent: string, token: string, userId: number }) {
-		return prisma.session.create({ data })
+		return db.insertInto('session').values(data).execute()
 	}
 }

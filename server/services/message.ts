@@ -1,43 +1,29 @@
-import { prisma } from "../db/prisma.ts"
+import { db } from "../db/index.ts"
 
 export class MessageService {
 	constructor() { }
 
 	async getMessagesSentByUser(userId: number) {
-		return prisma.message.findMany({
-			where: { fromUserId: userId }
-		})
+		return db.selectFrom('message')
+			.where('fromUserId', '=', userId)
+			.selectAll()
+			.execute()
 	}
 
 	async getMessagesReceivedByUser(userId: number) {
-		return prisma.message.findMany({
-			where: { toUserId: userId }
-		});
+		return db.selectFrom('message')
+			.where('toUserId', '=', userId)
+			.selectAll()
+			.execute()
 	}
 
 	async getMessages() {
-		return prisma.message.findMany()
+		return db.selectFrom('message')
+			.selectAll()
+			.execute()
 	}
 
 	async createMessage(data: { fromUserId: number, toUserId: number, content: string }) {
-		return prisma.message.create({ data })
-	}
-
-	async getMessagesForUser(userId: number) {
-		return prisma.message.findMany({
-			where: {
-				OR: [
-					{ fromUserId: userId },
-					{ toUserId: userId }
-				]
-			},
-			include: {
-				fromUser: true,
-				toUser: true,
-			},
-			orderBy: {
-				createdAt: 'asc',
-			},
-		});
+		return db.insertInto('message').values(data).execute()
 	}
 }

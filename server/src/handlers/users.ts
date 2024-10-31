@@ -20,18 +20,20 @@ export async function registerUser(req: Request): Promise<Response> {
 	try {
 		const user = await userService.createUser({ email, passwordHash });
 		const token = await create({ alg: "HS512", typ: "JWT" }, { userId: user.id }, key);
+
+		// TODO: session must be securely stored (client) and properly expired
 		const session = await sessionService.createSession({
 			ip: req.headers.get("x-forwarded-for") || "unknown",
 			userAgent: req.headers.get("user-agent") || "unknown",
 			token,
-			userId: user.id,
+			userId: user.insertId,
 		});
 
 		return new Response(JSON.stringify({ user, token }), {
 			status: 201,
 			headers: { "Content-Type": "application/json" },
 		});
-	} catch (error) {
+	} catch (error: Error) {
 		return new Response(JSON.stringify({ error: error.message }), {
 			status: 400,
 			headers: { "Content-Type": "application/json" },
@@ -70,3 +72,10 @@ export async function loginUser(req: Request): Promise<Response> {
 	}
 }
 
+export async function getUsers(req: Request): Promise<Response> {
+	const users = await userService.getUsers();
+	return new Response(JSON.stringify(users), {
+		status: 200,
+		headers: { "Content-Type": "application/json" },
+	});
+}
