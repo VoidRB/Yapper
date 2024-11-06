@@ -1,18 +1,13 @@
 import db from '../db/db.ts';
+import { sessionObj, sessionTuple } from '../src/types/allTypes.ts';
 
 export class SessionService {
   constructor() {}
 
   async getSession(id: number) {
     const query = db.prepareQuery<
-      [number, string, string, string, number],
-      {
-        id: number;
-        ip: string;
-        userAgent: string;
-        token: string;
-        userId: number;
-      },
+      sessionTuple,
+      sessionObj,
       {
         id: number;
       }
@@ -23,43 +18,21 @@ export class SessionService {
   }
 
   async getSessions() {
-    const query = db.prepareQuery<
-      [number, string, string, string, number],
-      {
-        id: number;
-        ip: string;
-        userAgent: string;
-        token: string;
-        userId: number;
-      }
-    >('SELECT * FROM sessions ;');
+    const query = db.prepareQuery<sessionTuple, sessionObj>(
+      'SELECT * FROM sessions ;'
+    );
     const sessions = query.firstEntry();
     query.finalize();
     return await sessions;
   }
 
-  async createSession(data: {
+  createSession(data: {
     ip: string;
     userAgent: string;
     token: string;
     userId: number;
   }) {
-    const query = db.prepareQuery<
-      [number, string, string, string, number],
-      {
-        id: number;
-        ip: string;
-        userAgent: string;
-        token: string;
-        userId: number;
-      },
-      {
-        ip: string;
-        userAgent: string;
-        token: string;
-        userId: number;
-      }
-    >(
+    const query = db.prepareQuery<sessionTuple, sessionObj, typeof data>(
       'INSERT INTO sessions ( ip, userAgent, token, userId ) VALUES ( :ip, :userAgent, :token, :userId )'
     );
     const session = query.firstEntry({
@@ -69,6 +42,6 @@ export class SessionService {
       userId: data.userId,
     });
     query.finalize();
-    return await session;
+    return session;
   }
 }

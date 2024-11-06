@@ -28,6 +28,7 @@ export async function registerUser(
       email,
       hashed_password,
     });
+    if (!user) throw new Error('User not found');
     const token = await create(
       { alg: 'HS512', typ: 'JWT' },
       { userId: user?.id, exp: getNumericDate(60 * 30) },
@@ -39,7 +40,7 @@ export async function registerUser(
       ip: req.header('x-forwarded-for') || 'unknown',
       userAgent: req.header('user-agent') || 'unknown',
       token,
-      userId: user?.id,
+      userId: user.id,
     });
 
     return res
@@ -61,9 +62,9 @@ export async function loginUser(
   const { email, password } = await req.query;
 
   try {
-    const user = await userService.getUserByEmail(email);
-    const passwordMatch = await bcrypt.compare(password, user?.hashed_password);
-    if (!user) throw new Error();
+    const user = userService.getUserByEmail(email);
+    if (!user) throw new Error('User not found');
+    const passwordMatch = await bcrypt.compare(password, user.hashed_password);
     if (!passwordMatch) {
       throw new Error('Invalid credentials');
     }
@@ -74,8 +75,8 @@ export async function loginUser(
     );
 
     await sessionService.createSession({
-      ip: req.headers.get('x-forwarded-for') || 'unknown',
-      userAgent: req.headers.get('user-agent') || 'unknown',
+      ip: req.header('x-forwarded-for') || 'unknown',
+      userAgent: req.header('user-agent') || 'unknown',
       token,
       userId: user.id,
     });

@@ -1,50 +1,35 @@
-import { RowObject } from 'sqlite';
 import db from '../db/db.ts';
+import { UserObj, UserTuple } from '../src/types/allTypes.ts';
 
 export class UserService {
   constructor() {}
 
-  async getUser(id: number) {
-    let user: RowObject | undefined = {};
-    const query = db.prepareQuery<
-      [number, string, string],
-      { id: number; email: string; hashed_password: string },
-      { id: number }
-    >('SELECT * FROM users WHERE id = :id ;');
-    user = query.firstEntry({ id: id });
+  getUser(id: number) {
+    const query = db.prepareQuery<UserTuple, UserObj, { id: number }>(
+      'SELECT * FROM users WHERE id = :id ;'
+    );
+    const user = query.firstEntry({ id: id });
     query.finalize();
-    return await user;
+    return user;
   }
 
-  async getUserByEmail(email: string) {
-    let user: RowObject | undefined = {};
-    const query = db.prepareQuery<
-      [number, string, string],
-      { id: number; email: string; hashed_password: string },
-      { email: string }
-    >('SELECT * FROM users WHERE email = :email;');
-    user = query.firstEntry({ email: email });
+  getUserByEmail(email: string) {
+    const query = db.prepareQuery<UserTuple, UserObj, { email: string }>(
+      'SELECT * FROM users WHERE email = :email;'
+    );
+    const user = query.firstEntry({ email: email });
     query.finalize;
-    return await user;
+    return user;
   }
 
-  async getUsers() {
-    let allUsers: RowObject | undefined = {};
-    const query = db.prepareQuery<
-      [number, string, string],
-      { id: number; email: string; hashed_password: string }
-    >('SELECT * FROM users ;');
-    allUsers = query.firstEntry();
+  getUsers() {
+    const query = db.prepareQuery<UserTuple, UserObj>('SELECT * FROM users ;');
+    const allUsers = query.firstEntry();
     query.finalize();
-    return await allUsers;
+    return allUsers;
   }
-
-  async createUser(data: { email: string; hashed_password: string }) {
-    const query = db.prepareQuery<
-      [string, string, number],
-      { id: number; email: string; hashed_password: string },
-      { email: string; hashed_password: string }
-    >(
+  createUser(data: { email: string; hashed_password: string }) {
+    const query = db.prepareQuery<UserTuple, UserObj, typeof data>(
       'INSERT INTO users ( email, hashed_password ) VALUES ( :email, :hashed_password ) RETURNING * ;'
     );
     const newUser = query.firstEntry({
@@ -53,6 +38,6 @@ export class UserService {
     });
     query.finalize();
 
-    return await newUser;
+    return newUser;
   }
 }
