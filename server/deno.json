@@ -1,17 +1,16 @@
 {
   "tasks": {
-    "migrate": "deno run -A --unstable db/migrations/index.ts",
-    "dev": "deno run -A --env-file --watch src/server.ts"
+    "dbStart": "deno run -A --unstable ./db/db.ts",
+    "dev": "deno run -A --watch ./src/server.ts"
   },
   "nodeModulesDir": "auto",
   "imports": {
-    "@db/sqlite": "jsr:@db/sqlite@^0.12.0",
-    "@soapbox/kysely-deno-sqlite": "jsr:@soapbox/kysely-deno-sqlite@^2.2.0",
     "@std/crypto": "jsr:@std/crypto@^1.0.3",
-    "@std/path": "jsr:@std/path@^1.0.7",
-    "@std/url": "jsr:@std/url@^0.225.1",
+    "@std/dotenv": "jsr:@std/dotenv@^0.225.2",
     "bcrypt": "npm:bcrypt@^5.1.1",
-    "djwt": "npm:djwt@^1.1.0",
-    "kysely": "npm:kysely@^0.27.4"
+    "body-parser": "npm:body-parser@^1.20.3",
+    "express": "npm:express@^4.21.1",
+    "djwt": "https://deno.land/x/djwt@v3.0.2/mod.ts",
+    "sqlite": "https://deno.land/x/sqlite@v3.9.1/mod.ts"
   }
 }

@@ -1,40 +1,21 @@
-import { registerUser, loginUser, getUsers } from "./handlers/users.ts";
-import { sendMessage, getMessages } from "./handlers/messages.ts";
-import { db } from "../db/index.ts";
+import express, { Express, Request, Response } from 'express';
+import bodyParser from 'body-parser';
+import { homeRouter, loginRouter, registerRouter } from './routes/allRoutes.ts';
+import '@std/dotenv/load';
+import Logger from './utils.js';
 
-// TODO: refactor seeds to become a migration
-try {
-	const userExists = await db.selectFrom('user').selectAll().where('email', '=', 'test@test.com').executeTakeFirst();
+const app: Express = express();
+const port = Deno.env.get('PORT') || 5000;
+app.use(express.urlencoded({ extended: true }));
+app.use(Logger);
+app.use(bodyParser.json());
 
-	if (!userExists) {
-		await db.insertInto('user').values({
-			email: 'test@test.com',
-			passwordHash: 'test',
-		}).execute()
-	}
-} catch (e) {
-	console.error("Failed to seed database", e)
-}
+app.use('/login', loginRouter);
+app.use('/home', homeRouter);
+app.use('/register', registerRouter);
 
-// TODO: refactor to use a router
-Deno.serve(async (req: Request) => {
-	const url = new URL(req.url);
-	const action = url.pathname.split("/")[1];
-
-	switch (action) {
-		case "register":
-			return registerUser(req);
-		case "login":
-			return loginUser(req);
-
-		// TODO: refactor to use auth middleware for all routes except for register and login
-		case "send-message":
-			return sendMessage(req);
-		case "get-messages":
-			return getMessages(req);
-		case "get-users":
-			return getUsers(req);
-		default:
-			return new Response("Not Found", { status: 404 });
-	}
+app.get('/', (_req: Request, res: Response) => {
+  res.send({ Message: 'this is where the login & register pages will live' });
 });
+
+app.listen(port, () => console.log(` : ${port}`));
