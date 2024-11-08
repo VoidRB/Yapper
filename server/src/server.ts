@@ -1,8 +1,9 @@
+import '@std/dotenv/load';
 import express, { Express, Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import { homeRouter, loginRouter, registerRouter } from './routes/allRoutes.ts';
-import '@std/dotenv/load';
 import Logger from './utils.js';
+import { authMiddleware } from "./middleware/auth.ts";
 
 const app: Express = express();
 const port = Deno.env.get('PORT') || 5000;
@@ -11,8 +12,11 @@ app.use(Logger);
 app.use(bodyParser.json());
 
 app.use('/login', loginRouter);
-app.use('/home', homeRouter);
 app.use('/register', registerRouter);
+
+// all routes below this middleware will require authentication
+app.use(authMiddleware);
+app.use('/home', homeRouter);
 
 app.get('/', (_req: Request, res: Response) => {
   res.send({ Message: 'this is where the login & register pages will live' });
