@@ -11,6 +11,7 @@
     "body-parser": "npm:body-parser@^1.20.3",
     "express": "npm:express@^4.21.1",
     "djwt": "https://deno.land/x/djwt@v3.0.2/mod.ts",
-    "sqlite": "https://deno.land/x/sqlite@v3.9.1/mod.ts"
+    "sqlite": "https://deno.land/x/sqlite@v3.9.1/mod.ts",
+    "zod": "npm:zod@^3.23.8"
   }
 }
