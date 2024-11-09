@@ -13,4 +13,4 @@ type sessionObj = {
   userId: number;
 };
 
-export type { UserObj, UserTuple, MsgObj, MsgTuple, sessionObj, sessionTuple };
+export type { MsgObj, MsgTuple, sessionObj, sessionTuple, UserObj, UserTuple };

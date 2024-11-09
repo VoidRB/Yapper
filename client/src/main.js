@@ -12,7 +12,7 @@ app.mount("#app");
 
 if (localStorage.getItem("theme")) {
   console.log(`There is a theme`);
-  let themestate = JSON.parse(localStorage.getItem("theme"));
+  const themestate = JSON.parse(localStorage.getItem("theme"));
 
   if (themestate === true) {
     document.body.classList.remove("dark");

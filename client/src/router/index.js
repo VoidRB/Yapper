@@ -28,14 +28,7 @@ const router = createRouter({
         title: "Profile",
       },
     },
-    {
-      path: "/colors",
-      name: "colors",
-      meta: {
-        title: "colors",
-      },
-      component: () => import("@/views/ColorsView.vue"),
-    },
+
     {
       path: "/:catchall(.*)",
       name: "notFound",
@@ -49,7 +42,7 @@ const router = createRouter({
 
 export default router;
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _from, next) => {
   document.title = `${to.meta.title} | Yapper`;
   next();
 });

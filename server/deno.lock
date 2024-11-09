@@ -5,6 +5,7 @@
     "jsr:@std/dotenv@~0.225.2": "0.225.2",
     "npm:bcrypt@^5.1.1": "5.1.1",
     "npm:body-parser@^1.20.3": "1.20.3",
+    "npm:cors@^2.8.5": "2.8.5",
     "npm:express@^4.21.1": "4.21.1",
     "npm:zod@^3.23.8": "3.23.8"
   },
@@ -136,6 +137,13 @@
     },
     "cookie@0.7.1": {
       "integrity": "sha512-6DnInpx7SJ2AK3+CTUE/ZM0vWTUboZCegxhC2xiIydHR9jNuTAASBrfEpHhiGOZw/nX51bHt6YQl8jsGo4y/0w=="
+    },
+    "cors@2.8.5": {
+      "integrity": "sha512-KIHbLJqu73RGr/hnbrO9uBeixNGuvSQjul/jdFvS/KFSIH1hWVd1ng7zOHx+YrEfInLG7q4n6GHQ9cDtxv/P6g==",
+      "dependencies": [
+        "object-assign",
+        "vary"
+      ]
     },
     "debug@2.6.9": {
       "integrity": "sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==",
@@ -1381,6 +1389,7 @@
       "jsr:@std/dotenv@~0.225.2",
       "npm:bcrypt@^5.1.1",
       "npm:body-parser@^1.20.3",
+      "npm:cors@^2.8.5",
       "npm:express@^4.21.1",
       "npm:zod@^3.23.8"
     ]

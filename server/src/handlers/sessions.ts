@@ -1,11 +1,11 @@
 // deno-lint-ignore-file no-explicit-any
-import { verify } from 'djwt';
-import { crypto } from '@std/crypto';
+import { verify } from "djwt";
+import { crypto } from "@std/crypto";
 
 const key = await crypto.subtle.generateKey(
-  { name: 'HMAC', hash: 'SHA-512' },
+  { name: "HMAC", hash: "SHA-512" },
   true,
-  ['sign', 'verify']
+  ["sign", "verify"],
 );
 
 export async function verifyJwt(token: string): Promise<{ userId: number }> {
@@ -13,6 +13,6 @@ export async function verifyJwt(token: string): Promise<{ userId: number }> {
     const payload = await verify(token, key);
     return payload as { userId: number };
   } catch (error: any) {
-    throw new error('Invalid token');
+    throw new error("Invalid token");
   }
 }

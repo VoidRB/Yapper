@@ -1,7 +1,7 @@
-import { DB } from 'sqlite';
+import { DB } from "sqlite";
 
 // Open a database
-const db = new DB('./db/test.db');
+const db = new DB("./db/test.db");
 
 //USERS TABLE
 db.execute(`
@@ -31,9 +31,9 @@ db.execute(`
   )
 `);
 
-const query = db.query('SELECT * FROM sessions ;');
-console.log(query);
-
+console.log(db.query("SELECT * FROM users ;"));
+console.log(db.query("SELECT * FROM sessions ;"));
+console.log(db.query("SELECT * FROM message ;"));
 // db.close();
 
 export default db;

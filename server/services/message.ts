@@ -1,42 +1,42 @@
-import db from '../db/db.ts';
+import db from "../db/db.ts";
 
-import { MsgObj, MsgTuple } from '../src/types/allTypes.ts';
+import { MsgObj, MsgTuple } from "../src/types/allTypes.ts";
 
 export class MessageService {
   constructor() {}
 
-  async getMessagesSentByUser(userId: number) {
+  getMessagesSentByUser(userId: number) {
     const query = db.prepareQuery<MsgTuple, MsgObj, { userId: number }>(
-      'SELECT * FROM message where fromUserId = :userId ;'
+      "SELECT * FROM message where fromUserId = :userId ;",
     );
     const messages = query.firstEntry({ userId: userId });
     query.finalize();
-    return await messages;
+    return messages;
   }
 
-  async getMessagesReceivedByUser(userId: number) {
+  getMessagesReceivedByUser(userId: number) {
     const query = db.prepareQuery<MsgTuple, MsgObj, { userId: number }>(
-      'SELECT * FROM message where toUserId = :userId;'
+      "SELECT * FROM message where toUserId = :userId;",
     );
     const messages = query.firstEntry({ userId: userId });
     query.finalize();
-    return await messages;
+    return messages;
   }
 
-  async getMessages() {
-    const query = db.prepareQuery<MsgTuple, MsgObj>('SELECT * FROM message ;');
+  getMessages() {
+    const query = db.prepareQuery<MsgTuple, MsgObj>("SELECT * FROM message ;");
     const messages = query.firstEntry();
     query.finalize();
-    return await messages;
+    return messages;
   }
 
-  async createMessage(data: {
+  createMessage(data: {
     fromUserId: number;
     toUserId: number;
     content: string;
   }) {
     const query = db.prepareQuery<MsgTuple, MsgObj, typeof data>(
-      'INSERT INTO messages ( fromUserId, toUserId, content ) VALUES ( :fromUserId, :toUserId, :content );'
+      "INSERT INTO message ( fromUserId, toUserId, content ) VALUES ( :fromUserId, :toUserId, :content );",
     );
     const message = query.firstEntry({
       fromUserId: data.fromUserId,
@@ -44,6 +44,6 @@ export class MessageService {
       content: data.content,
     });
     query.finalize();
-    return await message;
+    return message;
   }
 }
