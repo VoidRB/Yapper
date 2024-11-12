@@ -1,7 +1,11 @@
 import db from "../../db/db.ts";
 
 import type { User, UserTuple } from "./model.ts";
-import type { CreateUserByUserSpec } from "./model.ts";
+import type {
+  CreateUserByUserSpec,
+  GetSingleUserByEmailSpec,
+  GetSingleUserByIDSpec,
+} from "./model.ts";
 
 export const createUserByUserStatement = db.prepareQuery<
   UserTuple,
@@ -11,8 +15,18 @@ export const createUserByUserStatement = db.prepareQuery<
   "INSERT INTO users ( email, hashed_password ) VALUES ( :email, :hashed_password ) RETURNING * ;",
 );
 
-export const getUserByEmailStatement = db.prepareQuery<
+export const getSingleUserByIdStatement = db.prepareQuery<
   UserTuple,
   User,
-  CreateUserByUserSpec
->("SELECT * FROM users WHERE email = :email;");
+  GetSingleUserByIDSpec
+>("SELECT * FROM users WHERE id = :id ;");
+
+export const getSingleUserByEmailStatement = db.prepareQuery<
+  UserTuple,
+  User,
+  GetSingleUserByEmailSpec
+>("SELECT * FROM users WHERE email = :email ;");
+
+export const getAllUsersStatement = db.prepareQuery<UserTuple, User>(
+  "SELECT * FROM users;",
+);

@@ -22,3 +22,15 @@ export const createUserByUserSpec = z.object({
 });
 
 export type CreateUserByUserSpec = z.infer<typeof createUserByUserSpec>;
+
+export const getSingleUserByIDSpec = z.object({
+  id: z.number(),
+});
+
+export type GetSingleUserByIDSpec = z.infer<typeof getSingleUserByIDSpec>;
+
+export const getSingleUserByEmailSpec = z.object({
+  email: z.string(),
+});
+
+export type GetSingleUserByEmailSpec = z.infer<typeof getSingleUserByEmailSpec>;
