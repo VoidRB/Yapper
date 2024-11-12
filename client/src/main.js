@@ -20,5 +20,5 @@ if (localStorage.getItem("theme")) {
     document.body.classList.add("dark");
   }
 } else {
-  localStorage.setItem("theme", "true");
+  localStorage.setItem("theme", true);
 }

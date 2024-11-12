@@ -1,9 +1,9 @@
 import { z } from "zod";
 
 export const messageSchema = z.object({
-	fromUserId: z.number(),
-	toUserId: z.number(),
-	content: z.string(),
+  fromUserId: z.number(),
+  toUserId: z.number(),
+  content: z.string(),
 });
 
 export type Message = z.infer<typeof messageSchema>;
@@ -17,7 +17,15 @@ export const messagesSpec = z.array(messageSchema);
 export type MessagesSpec = z.infer<typeof messagesSpec>;
 
 export const listMessagesByUserIdSpec = z.object({
-	userId: z.number(),
+  userId: z.number(),
 });
 
 export type ListMessagesByUserId = z.infer<typeof listMessagesByUserIdSpec>;
+
+export const createMessageByUserIdSpec = z.object({
+  fromUserId: z.number(),
+  toUserId: z.number(),
+  content: z.string(),
+});
+
+export type CreateMessageByUserId = z.infer<typeof createMessageByUserIdSpec>;

@@ -1,8 +1,13 @@
 <script setup>
 import { ref } from "vue";
-import { RouterLink } from "vue-router";
+import { RouterLink, useRoute } from "vue-router";
 
 const theme = ref(Boolean);
+
+const activeLink = (routePath) => {
+  const route = useRoute();
+  return route.path === routePath;
+};
 
 const switchTheme = () => {
   let themeState = JSON.parse(localStorage.getItem("theme"));
@@ -21,26 +26,54 @@ const switchTheme = () => {
 </script>
 
 <template>
-  <div class="dark:bg-CDBGPrimary bg-CLBGPrimary h-24 w-full antialiased">
+  <div
+    class="h-24 w-full bg-CLBGPrimary antialiased transition-colors dark:bg-CDBGPrimary"
+  >
     <div class="flex h-full w-full items-center justify-between px-10">
       <section>
         <RouterLink
           :to="{ name: 'Home' }"
-          class="dark:text-CDACCPrimary hover:dark:text-CDACCSecondary text-CLACCPrimary hover:text-CLACCSecondary text-2xl font-bold drop-shadow-sm focus:outline-none active:underline md:ml-12"
+          class="text-2xl font-bold text-CLACCPrimary drop-shadow-sm hover:text-CLACCSecondary focus:outline-none active:underline md:ml-12 dark:text-CDACCPrimary hover:dark:text-CDACCSecondary"
         >
           Yapper
         </RouterLink>
       </section>
       <section class="flex items-center justify-center gap-4">
         <button
-          class="dark:text-CDACCPrimary hover:dark:text-CDACCSecondary text-CLACCPrimary hover:text-CLACCSecondary focus:outline-none active:underline"
+          class="text-CLACCPrimary hover:text-CLACCSecondary focus:outline-none active:underline dark:text-CDACCPrimary hover:dark:text-CDACCSecondary"
           @click="switchTheme"
         >
           Switch Mode
         </button>
         <RouterLink
           :to="{ name: 'Profile' }"
-          class="dark:text-CDACCPrimary dark:ring-CDACCPrimary hover:dark:text-CDACCSecondary hover:dark:ring-CDACCSecondary focus:dark:ring-CDACCSecondary active:dark:text-CDACCSecondary text-CLACCPrimary ring-CLACCPrimary hover:text-CLACCSecondary hover:ring-CLACCSecondary focus:ring-CLACCSecondary active:text-CLACCSecondary flex size-10 cursor-pointer items-center justify-center rounded-full shadow-black ring-2 transition-all hover:size-11 hover:shadow-2xl focus:outline-none"
+          :class="[
+            activeLink('/') ? 'hidden' : 'visible',
+            'flex',
+            'size-10',
+            'cursor-pointer',
+            'items-center',
+            'justify-center',
+            'rounded-full',
+            'text-CLACCPrimary',
+            'shadow-black',
+            'ring-2',
+            'ring-CLACCPrimary',
+            'transition-all',
+            'hover:size-11',
+            'hover:text-CLACCSecondary',
+            'hover:shadow-2xl',
+            'hover:ring-CLACCSecondary',
+            'focus:outline-none',
+            'focus:ring-CLACCSecondary',
+            'active:text-CLACCSecondary',
+            'dark:text-CDACCPrimary',
+            'dark:ring-CDACCPrimary',
+            'hover:dark:text-CDACCSecondary',
+            'hover:dark:ring-CDACCSecondary',
+            'focus:dark:ring-CDACCSecondary',
+            'active:dark:text-CDACCSecondary',
+          ]"
           >P</RouterLink
         >
       </section>

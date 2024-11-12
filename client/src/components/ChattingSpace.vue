@@ -41,13 +41,13 @@ webSocket.onmessage = (event) => {
           v-model="inputText"
           autofocus
           type="text"
-          class="w-full rounded-lg bg-transparent p-4 text-black outline-none outline-CLACCPrimary focus:bg-slate-50 focus:bg-opacity-20 focus:shadow-2xl focus:outline-CLACCSecondary dark:text-white dark:outline-CDACCPrimary focus:dark:outline-CDACCSecondary"
+          class="w-full rounded-lg bg-transparent p-4 text-black shadow-2xl outline-none outline-CLACCPrimary transition-shadow focus:bg-slate-50 focus:bg-opacity-20 focus:shadow-black focus:outline-CLACCSecondary dark:text-white dark:outline-CDACCPrimary focus:dark:outline-CDACCSecondary"
         />
       </div>
       <div>
         <button
-          @click="SendMessage"
-          class="mr-10 size-10 cursor-pointer rounded-full text-2xl font-extrabold text-CLACCPrimary shadow-black ring-2 ring-CLACCPrimary transition-all hover:text-CLACCSecondary hover:shadow-2xl hover:ring-CLACCSecondary focus:outline-none focus:ring-CLACCSecondary active:text-CLACCSecondary dark:text-CDACCPrimary dark:ring-CDACCPrimary hover:dark:text-CDACCSecondary hover:dark:ring-CDACCSecondary focus:dark:ring-CDACCSecondary active:dark:text-CDACCSecondary"
+          @click="SendMessage, (inputText = '')"
+          class="mr-10 size-10 rounded-full border-b-2 border-CLACCPrimary text-3xl font-extrabold text-CLACCPrimary shadow-2xl ring-2 ring-CLACCPrimary hover:shadow-black focus:outline-none active:border-b-0 active:border-t-2 active:border-CLACCSecondary active:bg-none active:text-CLACCSecondary active:shadow-inner active:ring-CLACCSecondary dark:border-CDACCPrimary dark:text-CDACCPrimary dark:ring-CDACCPrimary dark:active:border-CDACCSecondary dark:active:text-CDACCSecondary dark:active:ring-CDACCSecondary"
         >
           >
         </button>

@@ -6,11 +6,11 @@ type MsgObj = { fromUserId: number; toUserId: number; content: string };
 
 type sessionTuple = [number, string, string, string, number];
 type sessionObj = {
-	id: number;
-	ip: string;
-	userAgent: string;
-	token: string;
-	userId: number;
+  id: number;
+  ip: string;
+  userAgent: string;
+  token: string;
+  userId: number;
 };
 
 export type { MsgObj, MsgTuple, sessionObj, sessionTuple, UserObj, UserTuple };

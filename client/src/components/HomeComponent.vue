@@ -8,7 +8,7 @@ const formState = ref(true);
 
 <template>
   <div
-    class="flex size-full flex-col items-center justify-center gap-10 bg-CLBGSecondary dark:bg-CDBGSecondary"
+    class="flex size-full flex-col items-center justify-center gap-10 bg-CLBGSecondary transition-colors dark:bg-CDBGSecondary"
   >
     <h1
       class="text-center text-5xl font-bold text-CLACCPrimary dark:text-CDACCPrimary"

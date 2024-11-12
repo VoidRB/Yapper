@@ -1,5 +1,5 @@
 import loginRouter from "./loginRouter.ts";
 import registerRouter from "./registerRouter.ts";
-import homeRouter from "./homeRouter.ts";
+import chatRouter from "./chatRouter.ts";
 
-export { homeRouter, loginRouter, registerRouter };
+export { chatRouter, loginRouter, registerRouter };
