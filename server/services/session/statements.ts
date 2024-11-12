@@ -10,3 +10,7 @@ export const createSessionByUserStatement = db.prepareQuery<
 >(
   "INSERT INTO sessions ( ip, userAgent, token, userId ) VALUES ( :ip, :userAgent, :token, :userId );",
 );
+
+export const getAllSessionsNoSpec = db.prepareQuery<SessionTuple, Session>(
+  "SELECT * FROM sessions ;",
+);

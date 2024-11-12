@@ -4,7 +4,10 @@ import {
   type Session,
 } from "./model.ts";
 
-import { createSessionByUserStatement } from "./statements.ts";
+import {
+  createSessionByUserStatement,
+  getAllSessionsNoSpec,
+} from "./statements.ts";
 
 export class SessionService {
   constructor() {}
@@ -20,5 +23,10 @@ export class SessionService {
       userId,
     });
     return await session;
+  }
+
+  async getSessions(): Promise<Session[]> {
+    const sessions = getAllSessionsNoSpec.allEntries();
+    return await sessions;
   }
 }
