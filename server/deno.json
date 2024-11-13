@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "dbStart": "deno run -A --unstable ./db/db.ts",
+    "db": "deno run -A --unstable ./db/db.ts",
     "dev": "deno run -A --watch ./src/server.ts"
   },
   "nodeModulesDir": "auto",

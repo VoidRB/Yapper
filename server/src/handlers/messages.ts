@@ -1,6 +1,6 @@
 // deno-lint-ignore-file no-explicit-any
 
-import { MessageService } from "../../services/message.ts";
+import { MessageService } from "../../services/message/service.ts";
 import { verifyJwt } from "./sessions.ts";
 import { Request, Response } from "express";
 
@@ -54,7 +54,9 @@ export async function getMessages(
 
   try {
     const payload = await verifyJwt(token);
-    const messages = messageService.getMessagesReceivedByUser(payload.userId);
+    const messages = messageService.getMessagesRecievedByUser({
+      userId: payload.userId,
+    });
 
     return res
       .status(200)

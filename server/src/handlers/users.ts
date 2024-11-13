@@ -1,6 +1,6 @@
 // deno-lint-ignore-file no-explicit-any
-import { UserService } from "../../services/user.ts";
-import { SessionService } from "../../services/session.ts";
+import { UserService } from "../../services/user/service.ts";
+import { SessionService } from "../../services/session/service.ts";
 import * as bcrypt from "bcrypt";
 import { create, getNumericDate } from "djwt";
 import { crypto } from "@std/crypto";
@@ -31,16 +31,15 @@ export async function registerUser(
     if (!user) throw new Error("User not found");
     const token = await create(
       { alg: "HS512", typ: "JWT" },
-      { userId: user?.id, exp: getNumericDate(60 * 30) },
+      { userId: user[0].id, exp: getNumericDate(60 * 30) },
       key,
     );
-
     // TODO: session must be securely stored (client) and properly expired
-    await sessionService.createSession({
+    await sessionService.createUserSession({
       ip: req.header("x-forwarded-for") || "unknown",
       userAgent: req.header("user-agent") || "unknown",
       token,
-      userId: user.id,
+      userId: user[0].id,
     });
 
     return res
@@ -62,23 +61,25 @@ export async function loginUser(
   const { email, password } = await req.query;
 
   try {
-    const user = userService.getUserByEmail(email);
-    if (!user) throw new Error("User not found");
-    const passwordMatch = await bcrypt.compare(password, user.hashed_password);
+    const user = await userService.getUserByEmail({ email: email });
+    const passwordMatch = await bcrypt.compare(
+      password,
+      user[0].hashed_password,
+    );
     if (!passwordMatch) {
       throw new Error("Invalid credentials");
     }
     const token = await create(
       { alg: "HS512", typ: "JWT" },
-      { userId: user.id },
+      { userId: user[0].id },
       key,
     );
 
-    await sessionService.createSession({
+    await sessionService.createUserSession({
       ip: req.header("x-forwarded-for") || "unknown",
       userAgent: req.header("user-agent") || "unknown",
       token,
-      userId: user.id,
+      userId: user[0].id,
     });
 
     return res
@@ -97,7 +98,7 @@ export async function getUsers(
   _req: Request,
   res: Response,
 ): Promise<Response> {
-  const users = await userService.getUsers();
+  const users = await userService.getAllUsers();
   return res
     .status(200)
     .set("Content-Type", "application/json")

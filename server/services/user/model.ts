@@ -3,7 +3,7 @@ import { z } from "zod";
 const userSchema = z.object({
   id: z.number(),
   email: z.string(),
-  hased_password: z.string(),
+  hashed_password: z.string(),
 });
 
 export type User = z.infer<typeof userSchema>;
