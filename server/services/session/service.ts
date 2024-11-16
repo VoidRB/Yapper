@@ -1,19 +1,18 @@
 import {
-  type CreateSessionByUserSpec,
-  createSessionByUserSpec,
-  type Session,
+  type CreateSessionByUserId,
+  createSessionByUserIdSpec,
 } from "./model.ts";
 
 import {
   createSessionByUserStatement,
-  getAllSessionsNoSpec,
+  getAllSessionsNoStatement,
 } from "./statements.ts";
 
 export class SessionService {
   constructor() {}
 
-  async createUserSession(data: CreateSessionByUserSpec): Promise<Session[]> {
-    const { ip, userAgent, token, userId } = createSessionByUserSpec.parse(
+  createUserSession(data: CreateSessionByUserId) {
+    const { ip, userAgent, token, userId } = createSessionByUserIdSpec.parse(
       data,
     );
     const session = createSessionByUserStatement.allEntries({
@@ -22,11 +21,12 @@ export class SessionService {
       token,
       userId,
     });
-    return await session;
+    return session;
   }
 
-  async getSessions(): Promise<Session[]> {
-    const sessions = getAllSessionsNoSpec.allEntries();
-    return await sessions;
+  getSessions() {
+    const sessions = getAllSessionsNoStatement.allEntries();
+
+    return sessions;
   }
 }

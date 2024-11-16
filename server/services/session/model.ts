@@ -24,11 +24,11 @@ export const sessionSpec = z.array(sessionTuple);
 
 export type SessionSpec = z.infer<typeof sessionSpec>;
 
-export const createSessionByUserSpec = z.object({
+export const createSessionByUserIdSpec = z.object({
   ip: z.string(),
   userAgent: z.string(),
   token: z.string(),
   userId: z.number(),
 });
 
-export type CreateSessionByUserSpec = z.infer<typeof createSessionByUserSpec>;
+export type CreateSessionByUserId = z.infer<typeof createSessionByUserIdSpec>;

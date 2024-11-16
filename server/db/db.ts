@@ -8,7 +8,7 @@ db.execute(`
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     email TEXT,
-    hashed_password TEXT
+    hashedPassword TEXT
   )
 `);
 //SESSIONS TABLE
@@ -31,9 +31,9 @@ db.execute(`
   )
 `);
 
-console.log(db.query("SELECT * FROM users ;"));
-console.log(db.query("SELECT * FROM sessions ;"));
-console.log(db.query("SELECT * FROM message ;"));
+console.log(db.query("SELECT * FROM users;"));
+console.log(db.query("SELECT * FROM sessions;"));
+console.log(db.query("SELECT * FROM message;"));
 // db.close();
 
 export default db;

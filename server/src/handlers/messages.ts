@@ -12,60 +12,78 @@ export async function sendMessage(
 ): Promise<Response> {
   const token = req.header("Authorization")?.split(" ")[1];
   if (!token) {
-    return res
-      .status(401)
-      .set("Content-Type", "application/json")
-      .send(JSON.stringify({ error: "Unauthorized" }));
+    return res.status(401).json({ error: "Unauthorized" });
   }
 
   try {
     const payload = await verifyJwt(token);
     const { toUserId, content } = await req.json();
 
-    const message = await messageService.createMessage({
+    const [message] = await messageService.createMessage({
       fromUserId: payload.userId,
       toUserId,
       content,
     });
 
-    return res
-      .status(201)
-      .set("Content-Type", "application/json")
-      .send(JSON.stringify(message));
+    return res.status(201).json(message);
   } catch (error: any) {
-    return res
-      .status(400)
-      .set("Content-Type", "application/json")
-      .send(JSON.stringify({ error: error.message }));
+    return res.status(400).json({ error: error.message });
   }
 }
 
-export async function getMessages(
+export async function getMessagesSent(
   req: Request,
   res: Response,
 ): Promise<Response> {
   const token = req.header("Authorization")?.split(" ")[1];
   if (!token) {
-    return res
-      .status(401)
-      .set("Content-Type", "application/json")
-      .send(JSON.stringify({ error: "Unauthorized" }));
+    return res.status(401).json({ error: "Unauthorized" });
   }
 
   try {
     const payload = await verifyJwt(token);
-    const messages = messageService.getMessagesRecievedByUser({
+    const messages = messageService.getMessagesSentByUser({
       userId: payload.userId,
     });
 
-    return res
-      .status(200)
-      .set("Content-Type", "application/json")
-      .send(JSON.stringify(messages));
+    return res.status(200).json(messages);
   } catch (error: any) {
-    return res
-      .status(400)
-      .set("Content-Type", "application/json")
-      .send(JSON.stringify({ error: error.message }));
+    return res.status(400).json({ error: error.message });
+  }
+}
+
+export async function getMessagesRecieved(
+  req: Request,
+  res: Response,
+): Promise<Response> {
+  const token = req.header("Authorization")?.split(" ")[1];
+  if (!token) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  try {
+    const payload = await verifyJwt(token);
+    const [messages] = messageService.getMessagesRecievedByUser({
+      userId: payload.userId,
+    });
+
+    return res.status(200).json(messages);
+  } catch (error: any) {
+    return res.status(400).json({ error: error.message });
+  }
+}
+
+export function getAllMessages(req: Request, res: Response): Promise<Response> {
+  const token = req.header("Authorization")?.split(" ")[1];
+  if (!token) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  try {
+    const [messages] = messageService.getMessages();
+
+    return res.status(200).json(messages);
+  } catch (error: any) {
+    return res.status(400).json({ error: error.message });
   }
 }

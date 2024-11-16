@@ -21,36 +21,30 @@ export async function registerUser(
 ): Promise<Response> {
   const { email, password } = await req.query;
   const saltRounds = 10;
-  const hashed_password = await bcrypt.hash(password, saltRounds);
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
 
   try {
-    const user = await userService.createUser({
+    const [user] = userService.createUser({
       email,
-      hashed_password,
+      hashedPassword,
     });
-    if (!user) throw new Error("User not found");
     const token = await create(
       { alg: "HS512", typ: "JWT" },
-      { userId: user[0].id, exp: getNumericDate(60 * 30) },
+      { userId: user.id, exp: getNumericDate(60 * 30) },
       key,
     );
+
     // TODO: session must be securely stored (client) and properly expired
-    await sessionService.createUserSession({
+    sessionService.createUserSession({
       ip: req.header("x-forwarded-for") || "unknown",
       userAgent: req.header("user-agent") || "unknown",
       token,
-      userId: user[0].id,
+      userId: user.id,
     });
 
-    return res
-      .status(201)
-      .set("Content-Type", "application/json")
-      .send(JSON.stringify({ user, token }));
+    return res.status(201).json({ user, token });
   } catch (error: any) {
-    return res
-      .status(400)
-      .set("Content-Type", "application/json")
-      .send(JSON.stringify({ error: error.message }));
+    return res.status(400).json({ error: error.message });
   }
 }
 
@@ -61,10 +55,10 @@ export async function loginUser(
   const { email, password } = await req.query;
 
   try {
-    const user = await userService.getUserByEmail({ email: email });
+    const user = userService.getUserByEmail({ email: email });
     const passwordMatch = await bcrypt.compare(
       password,
-      user[0].hashed_password,
+      user[0].hashedPassword,
     );
     if (!passwordMatch) {
       throw new Error("Invalid credentials");
@@ -75,32 +69,20 @@ export async function loginUser(
       key,
     );
 
-    await sessionService.createUserSession({
+    sessionService.createUserSession({
       ip: req.header("x-forwarded-for") || "unknown",
       userAgent: req.header("user-agent") || "unknown",
       token,
       userId: user[0].id,
     });
 
-    return res
-      .status(200)
-      .set("Content-Type", "application/json")
-      .send(JSON.stringify({ user, token }));
+    return res.status(200).json({ user, token });
   } catch (error: any) {
-    return res
-      .status(401)
-      .set("Content-Type", "application/json")
-      .send(JSON.stringify({ error: error.message }));
+    return res.status(401).json({ error: error.message });
   }
 }
 
-export async function getUsers(
-  _req: Request,
-  res: Response,
-): Promise<Response> {
-  const users = await userService.getAllUsers();
-  return res
-    .status(200)
-    .set("Content-Type", "application/json")
-    .send(JSON.stringify({ users }));
+export function getUsers(_req: Request, res: Response): Promise<Response> {
+  const users = userService.getAllUsers();
+  return res.status(200).json({ users });
 }

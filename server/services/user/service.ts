@@ -1,11 +1,10 @@
 import {
-  type CreateUserByUserSpec,
+  type CreateUserByUserId,
   createUserByUserSpec,
-  type GetSingleUserByEmailSpec,
+  type GetSingleUserByEmail,
   getSingleUserByEmailSpec,
-  type GetSingleUserByIDSpec,
+  type GetSingleUserById,
   getSingleUserByIDSpec,
-  type User,
 } from "./model.ts";
 
 import {
@@ -18,34 +17,35 @@ import {
 export class UserService {
   constructor() {}
 
-  async createUser(data: CreateUserByUserSpec): Promise<User[]> {
-    const { email, hashed_password } = createUserByUserSpec.parse(data);
+  createUser(data: CreateUserByUserId) {
+    const { email, hashedPassword } = createUserByUserSpec.parse(data);
     const user = createUserByUserStatement.allEntries({
       email,
-      hashed_password,
+      hashedPassword,
     });
-    return await user;
+    createUserByUserStatement.finalize();
+    return user;
   }
 
-  async getUserById(data: GetSingleUserByIDSpec): Promise<User[]> {
+  getUserById(data: GetSingleUserById) {
     const { id } = getSingleUserByIDSpec.parse(data);
     const user = getSingleUserByIdStatement.allEntries({
       id,
     });
 
-    return await user;
+    return user;
   }
-  async getUserByEmail(data: GetSingleUserByEmailSpec): Promise<User[]> {
+  getUserByEmail(data: GetSingleUserByEmail) {
     const { email } = getSingleUserByEmailSpec.parse(data);
     const user = getSingleUserByEmailStatement.allEntries({
       email,
     });
 
-    return await user;
+    return user;
   }
 
-  async getAllUsers(): Promise<User[]> {
+  getAllUsers() {
     const users = getAllUsersStatement.allEntries();
-    return await users;
+    return users;
   }
 }

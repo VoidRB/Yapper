@@ -1,9 +1,8 @@
 import {
-  CreateMessageByUserId,
+  type CreateMessageByUserId,
   createMessageByUserIdSpec,
   type ListMessagesByUserId,
   listMessagesByUserIdSpec,
-  type Message,
 } from "./model.ts";
 import {
   createMessage,
@@ -15,30 +14,28 @@ import {
 export class MessageService {
   constructor() {}
 
-  async getMessagesSentByUser(data: ListMessagesByUserId): Promise<Message[]> {
+  getMessagesSentByUser(data: ListMessagesByUserId) {
     const { userId } = listMessagesByUserIdSpec.parse(data);
     const messages = getMessagesSentByUserStatement.allEntries({ userId });
-    return await messages;
+    return messages;
   }
 
-  async getMessagesRecievedByUser(
-    data: ListMessagesByUserId,
-  ): Promise<Message[]> {
+  getMessagesRecievedByUser(data: ListMessagesByUserId) {
     const { userId } = listMessagesByUserIdSpec.parse(data);
     const messages = getMessagesRecievedByUserStatement.allEntries({ userId });
-    return await messages;
+    return messages;
   }
 
-  async getMessages(): Promise<Message[]> {
+  getMessages() {
     const messages = getMessages.allEntries();
-    return await messages;
+    return messages;
   }
 
-  async createMessage(data: CreateMessageByUserId): Promise<Message[]> {
+  createMessage(data: CreateMessageByUserId) {
     const { fromUserId, toUserId, content } = createMessageByUserIdSpec.parse(
       data,
     );
     const message = createMessage.allEntries({ fromUserId, toUserId, content });
-    return await message;
+    return message;
   }
 }
