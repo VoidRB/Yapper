@@ -8,7 +8,7 @@ router.post("/open", (_req: Request, _res: Response) => {});
 router.post("/close", (_req: Request, _res: Response) => {});
 
 router.get("/messages/all", async (req: Request, res: Response) => {
-	await getAllMessages(req, res);
+  await getAllMessages(req, res);
 });
 
 export default router;
