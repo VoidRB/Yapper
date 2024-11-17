@@ -19,17 +19,16 @@ export class UserService {
 
   createUser(data: CreateUserByUserId) {
     const { email, hashedPassword } = createUserByUserSpec.parse(data);
-    const user = createUserByUserStatement.allEntries({
+    const [user] = createUserByUserStatement.allEntries({
       email,
       hashedPassword,
     });
-    createUserByUserStatement.finalize();
     return user;
   }
 
   getUserById(data: GetSingleUserById) {
     const { id } = getSingleUserByIDSpec.parse(data);
-    const user = getSingleUserByIdStatement.allEntries({
+    const [user] = getSingleUserByIdStatement.allEntries({
       id,
     });
 
@@ -37,7 +36,7 @@ export class UserService {
   }
   getUserByEmail(data: GetSingleUserByEmail) {
     const { email } = getSingleUserByEmailSpec.parse(data);
-    const user = getSingleUserByEmailStatement.allEntries({
+    const [user] = getSingleUserByEmailStatement.allEntries({
       email,
     });
 

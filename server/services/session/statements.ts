@@ -11,6 +11,6 @@ export const createSessionByUserStatement = db.prepareQuery<
   "INSERT INTO sessions ( ip, userAgent, token, userId ) VALUES ( :ip, :userAgent, :token, :userId );",
 );
 
-export const getAllSessionsNoStatement = db.prepareQuery<SessionTuple, Session>(
+export const getAllSessionsStatement = db.prepareQuery<SessionTuple, Session>(
   "SELECT * FROM sessions ;",
 );

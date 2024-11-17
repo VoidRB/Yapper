@@ -13,6 +13,6 @@ export async function verifyJwt(token: string): Promise<{ userId: number }> {
     const payload = await verify(token, key);
     return payload as { userId: number };
   } catch (error: any) {
-    throw new error("Invalid token");
+    throw new Error(error.message);
   }
 }

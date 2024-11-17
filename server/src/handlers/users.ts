@@ -23,28 +23,34 @@ export async function registerUser(
   const saltRounds = 10;
   const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-  try {
-    const [user] = userService.createUser({
-      email,
-      hashedPassword,
-    });
-    const token = await create(
-      { alg: "HS512", typ: "JWT" },
-      { userId: user.id, exp: getNumericDate(60 * 30) },
-      key,
-    );
+  const testUserExistence = userService.getUserByEmail({ email: email });
 
-    // TODO: session must be securely stored (client) and properly expired
-    sessionService.createUserSession({
-      ip: req.header("x-forwarded-for") || "unknown",
-      userAgent: req.header("user-agent") || "unknown",
-      token,
-      userId: user.id,
-    });
+  if (testUserExistence) {
+    return res.status(400).json({ error: "User Exists" });
+  } else {
+    try {
+      const user = userService.createUser({
+        email,
+        hashedPassword,
+      });
+      const token = await create(
+        { alg: "HS512", typ: "JWT" },
+        { userId: user.id, exp: getNumericDate(60 * 30) },
+        key,
+      );
 
-    return res.status(201).json({ user, token });
-  } catch (error: any) {
-    return res.status(400).json({ error: error.message });
+      // TODO: session must be securely stored (client) and properly expired
+      sessionService.createUserSession({
+        ip: req.header("x-forwarded-for") || "unknown",
+        userAgent: req.header("user-agent") || "unknown",
+        token,
+        userId: user.id,
+      });
+
+      return res.status(201).json({ user, token });
+    } catch (error: any) {
+      return res.status(400).json({ error: error.message });
+    }
   }
 }
 
@@ -56,16 +62,13 @@ export async function loginUser(
 
   try {
     const user = userService.getUserByEmail({ email: email });
-    const passwordMatch = await bcrypt.compare(
-      password,
-      user[0].hashedPassword,
-    );
+    const passwordMatch = await bcrypt.compare(password, user.hashedPassword);
     if (!passwordMatch) {
       throw new Error("Invalid credentials");
     }
     const token = await create(
       { alg: "HS512", typ: "JWT" },
-      { userId: user[0].id },
+      { userId: user.id },
       key,
     );
 
@@ -73,7 +76,7 @@ export async function loginUser(
       ip: req.header("x-forwarded-for") || "unknown",
       userAgent: req.header("user-agent") || "unknown",
       token,
-      userId: user[0].id,
+      userId: user.id,
     });
 
     return res.status(200).json({ user, token });

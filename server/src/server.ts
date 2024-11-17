@@ -18,7 +18,7 @@ app.use(LoggerMiddleware);
 app.use("/login", loginRouter);
 app.use("/register", registerRouter);
 
-// all routes below this middleware will require
+// all routes below this middleware will require authentication
 app.use(authMiddleware);
 app.use("/chat", chatRouter);
 

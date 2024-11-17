@@ -7,7 +7,7 @@ router.post("/", async (req: Request, res: Response) => {
   await loginUser(req, res);
 });
 
-router.post("/all", async (req: Request, res: Response) => {
+router.get("/all", async (req: Request, res: Response) => {
   await getUsers(req, res);
 });
 

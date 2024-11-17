@@ -5,7 +5,7 @@ import {
 
 import {
   createSessionByUserStatement,
-  getAllSessionsNoStatement,
+  getAllSessionsStatement,
 } from "./statements.ts";
 
 export class SessionService {
@@ -25,7 +25,7 @@ export class SessionService {
   }
 
   getSessions() {
-    const sessions = getAllSessionsNoStatement.allEntries();
+    const sessions = getAllSessionsStatement.allEntries();
 
     return sessions;
   }

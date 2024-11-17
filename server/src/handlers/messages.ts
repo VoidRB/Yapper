@@ -19,7 +19,7 @@ export async function sendMessage(
     const payload = await verifyJwt(token);
     const { toUserId, content } = await req.json();
 
-    const [message] = await messageService.createMessage({
+    const [message] = messageService.createMessage({
       fromUserId: payload.userId,
       toUserId,
       content,
