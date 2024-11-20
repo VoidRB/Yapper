@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 
-const webSocket = new WebSocket(`ws://localhost:5005/`);
+const webSocket = new WebSocket(`ws://localhost:5007`);
 
 const inputText = ref("");
 
@@ -15,9 +15,9 @@ const SendMessage = () => {
   }
 };
 
-webSocket.onmessage = (event) => {
+webSocket.addEventListener("message", (event) => {
   texts.value.push(event.data);
-};
+});
 </script>
 <template>
   <div

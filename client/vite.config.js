@@ -8,14 +8,15 @@ export default defineConfig({
   plugins: [vue()],
   server: {
     port: 3005,
-  },
-  proxy: {
-    "/api/": {
-      target: "http://localhost:5005",
-      changeOrigin: true,
-      rewrite: (path) => path.replace(/^\/api/, ""),
+    proxy: {
+      "/api/": {
+        target: "http://localhost:5005",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
     },
   },
+
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),

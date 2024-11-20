@@ -11,7 +11,7 @@ const register = async () => {
     const response = await axios.post(
       `/api/register?email=${chatEmail.value}&password=${chatPassword.value}`,
     );
-    localStorage.setItem("register-user-data", JSON.stringify(response.data));
+    sessionStorage.setItem("register-user-data", JSON.stringify(response.data));
     apiReponse.value = response.data;
   } catch (error) {}
 };
@@ -32,6 +32,7 @@ const register = async () => {
       placeholder="password"
       autocomplete="current-password"
       required
+      maxlength="8"
       class="rounded-lg bg-transparent p-2 text-black outline-none outline-CLACCPrimary focus:bg-slate-50 focus:bg-opacity-20 focus:shadow-2xl focus:outline-CLACCSecondary dark:text-white dark:outline-CDACCPrimary focus:dark:outline-CDACCSecondary"
     />
 

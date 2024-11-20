@@ -11,9 +11,11 @@ const login = async () => {
     const response = await axios.post(
       `/api/login?email=${chatEmail.value}&password=${chatPassword.value}`,
     );
-    localStorage.setItem("Login-user-data", JSON.stringify(response.data));
+    sessionStorage.setItem("Login-user-data", JSON.stringify(response.data));
     apiReponse.value = response.data;
-  } catch (error) {}
+  } catch (error) {
+    throw error;
+  }
 };
 </script>
 <template>
@@ -32,6 +34,7 @@ const login = async () => {
       placeholder="password"
       autocomplete="current-password"
       required
+      maxlength="8"
       class="rounded-lg bg-transparent p-2 text-black outline-none outline-CLACCPrimary focus:bg-slate-50 focus:bg-opacity-20 focus:shadow-2xl focus:outline-CLACCSecondary dark:text-white dark:outline-CDACCPrimary focus:dark:outline-CDACCSecondary"
     />
 

@@ -3,7 +3,7 @@ import { getAllMessages } from "../handlers/messages.ts";
 
 const router = Router();
 
-router.post("/open", (_req: Request, _res: Response) => {});
+router.get("/open", (_req: Request, _res: Response) => {});
 
 router.post("/close", (_req: Request, _res: Response) => {});
 

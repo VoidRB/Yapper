@@ -15,6 +15,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use(LoggerMiddleware);
+
 app.use("/login", loginRouter);
 app.use("/register", registerRouter);
 
