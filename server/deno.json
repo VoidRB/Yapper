@@ -5,6 +5,7 @@
   },
   "nodeModulesDir": "auto",
   "imports": {
+    "@oak/oak": "jsr:@oak/oak@^17.1.3",
     "@std/crypto": "jsr:@std/crypto@^1.0.3",
     "@std/dotenv": "jsr:@std/dotenv@^0.225.2",
     "sqlite": "https://deno.land/x/sqlite@v3.9.1/mod.ts",

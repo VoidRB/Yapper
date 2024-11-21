@@ -1,26 +1,29 @@
 import "@std/dotenv/load";
-import express, { Express } from "express";
-import bodyParser from "body-parser";
-import cors from "cors";
-import { chatRouter, loginRouter, registerRouter } from "./routes/allRoutes.ts";
-import LoggerMiddleware from "./middleware/utils.ts";
-
+import { Application, Context, Router } from "@oak/oak";
 import { authMiddleware } from "./middleware/auth.ts";
+import { loginUser, registerUser } from "./handlers/users.ts";
+import { getAllMessages } from "./handlers/messages.ts";
 
-const app: Express = express();
-const port = Deno.env.get("PORT") || 5000;
+const app = new Application();
+const router = new Router();
+const port = Number(Deno.env.get("PORT"));
 
-app.use(express.urlencoded({ extended: true }));
-app.use(cors());
-app.use(bodyParser.json());
+app.use(router.routes());
+app.use(router.allowedMethods());
 
-app.use(LoggerMiddleware);
+router.post("/register", async (ctx: Context) => {
+  await registerUser(ctx);
+});
 
-app.use("/login", loginRouter);
-app.use("/register", registerRouter);
+router.post("/login", async (ctx: Context) => {
+  await loginUser(ctx);
+});
 
-// all routes below this middleware will require authentication
 app.use(authMiddleware);
-app.use("/chat", chatRouter);
 
-app.listen(port, () => console.log(` : ${port}`));
+router.get("/chat/messages/all", (ctx: Context) => {
+  getAllMessages(ctx);
+});
+
+console.log(` : ${port}`);
+await app.listen({ port: port });

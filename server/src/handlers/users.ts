@@ -3,24 +3,23 @@ import { UserService } from "../../services/user/service.ts";
 import { SessionService } from "../../services/session/service.ts";
 import * as bcrypt from "bcrypt";
 import { create, getNumericDate } from "djwt";
-import { Request, Response } from "express";
-import { ENCRYPYTION_KEY } from "../../config/JWTKey.ts";
+import { ENCRYPTION_KEY } from "../../config/ENCRYPTION_KEY.ts";
+import { Context } from "@oak/oak";
 
 const userService = new UserService();
 const sessionService = new SessionService();
 
-export async function registerUser(
-  req: Request,
-  res: Response,
-): Promise<Response> {
+export async function registerUser(ctx: Context) {
   try {
-    const { email, password } = await req.body;
+    const { email, password } = await ctx.request.body.json();
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     const userExists = userService.getUserByEmail({ email: email });
 
     if (userExists) {
-      return res.status(400).json({ error: "A user with this email exists" });
+      ctx.response.status = 400;
+      ctx.response.body = { error: "A user with this email exists" };
+      return ctx.response;
     }
 
     const user = userService.createUser({
@@ -30,27 +29,27 @@ export async function registerUser(
     const token = await create(
       { alg: "HS512", typ: "JWT" },
       { userId: user.id, exp: getNumericDate(60 * 30) },
-      ENCRYPYTION_KEY,
+      ENCRYPTION_KEY,
     );
     // TODO: session must be securely stored (client) and properly expired
     sessionService.createUserSession({
-      ip: req.header("x-forwarded-for") || "unknown",
-      userAgent: req.header("user-agent") || "unknown",
+      ip: ctx.request.headers.get("x-forwarded-for") || "unknown",
+      userAgent: ctx.request.headers.get("user-agent") || "unknown",
       token,
       userId: user.id,
     });
-
-    return res.status(201).json({ success: true, message: "User created" });
+    ctx.response.body = { success: true, message: "User created" };
+    ctx.response.status = 201;
+    return ctx.response;
   } catch (error: any) {
-    return res.status(400).json({ error: error.message });
+    ctx.response.body = { error: error.message };
+    ctx.response.status = 400;
+    return ctx.response;
   }
 }
 
-export async function loginUser(
-  req: Request,
-  res: Response,
-): Promise<Response> {
-  const { email, password } = await req.body;
+export async function loginUser(ctx: Context) {
+  const { email, password } = await ctx.request.body.json();
 
   try {
     const user = userService.getUserByEmail({ email: email });
@@ -66,23 +65,28 @@ export async function loginUser(
     const token = await create(
       { alg: "HS512", typ: "JWT" },
       { userId: user.id },
-      ENCRYPYTION_KEY,
+      ENCRYPTION_KEY,
     );
 
     sessionService.createUserSession({
-      ip: req.header("x-forwarded-for") || "unknown",
-      userAgent: req.header("user-agent") || "unknown",
+      ip: ctx.request.headers.get("x-forwarded-for") || "unknown",
+      userAgent: ctx.request.headers.get("user-agent") || "unknown",
       token,
       userId: user.id,
     });
-
-    return res.status(200).json({ success: true, message: "User logged in", token });
+    ctx.response.status = 200;
+    ctx.response.body = { success: true, message: "User logged in", token };
+    return ctx.response;
   } catch (error: any) {
-    return res.status(401).json({ error: error.message });
+    ctx.response.status = 401;
+    ctx.response.body = { error: error.message };
+    return ctx.response;
   }
 }
 
-export function getUsers(_req: Request, res: Response): Promise<Response> {
+export function getUsers(ctx: Context) {
   const users = userService.getAllUsers();
-  return res.status(200).json({ users });
+  ctx.response.status = 200;
+  ctx.response.body = { users };
+  return ctx.response;
 }

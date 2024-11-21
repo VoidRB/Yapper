@@ -1,17 +1,18 @@
-import type { NextFunction, Request, Response } from "express";
+import { Context, Middleware, Next } from "@oak/oak";
 import { verifyJwt } from "../handlers/sessions.ts";
 
-export const authMiddleware = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const token = req.header("Authorization")?.split(" ")[1];
+export const authMiddleware: Middleware = async (ctx: Context, next: Next) => {
+  const token = ctx.request.headers.get("Authorization")?.split(" ")[1];
   if (!token) {
-    return res.status(401).json({ error: "Unauthorized" });
+    ctx.response.status = 401;
+    ctx.response.body = { error: "Unauthorized" };
+    console.log(token);
+
+    return ctx.response;
   }
+  console.log(token);
 
   const payload = await verifyJwt(token);
-  req.user = payload;
-  next();
+  ctx.state.payload = payload;
+  await next();
 };

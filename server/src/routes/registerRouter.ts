@@ -1,10 +1,11 @@
-import Router, { Request, Response } from "express";
+import { Context, Router } from "@oak/oak";
+
 import { registerUser } from "../handlers/users.ts";
 
-const router = Router();
+const router = new Router();
 
-router.post("/", async (req: Request, res: Response) => {
-  await registerUser(req, res);
+router.post("/", async (ctx: Context) => {
+  await registerUser(ctx);
 });
 
 export default router;
