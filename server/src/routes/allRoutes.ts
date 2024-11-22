@@ -1,5 +1,17 @@
-import loginRouter from "./loginRouter.ts";
-import registerRouter from "./registerRouter.ts";
-import chatRouter from "./chatRouter.ts";
+import { Context, Router } from "@oak/oak";
 
-export { chatRouter, loginRouter, registerRouter };
+import { getUsers, loginUser, registerUser } from "../handlers/users.ts";
+
+const router = new Router();
+
+router.post("/register", async (ctx: Context) => {
+  await registerUser(ctx);
+});
+router.post("/login", async (ctx: Context) => {
+  await loginUser(ctx);
+});
+router.get("/login/all", (ctx) => {
+  getUsers(ctx);
+});
+
+export default router;
