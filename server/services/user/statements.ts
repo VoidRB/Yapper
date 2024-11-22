@@ -3,8 +3,8 @@ import db from "../../db/db.ts";
 import type { User, UserTuple } from "./model.ts";
 import type {
   CreateUserByUserId,
-  GetSingleUserByEmail,
   GetSingleUserById,
+  GetSingleUserByUsername,
 } from "./model.ts";
 
 export const createUserByUserStatement = db.prepareQuery<
@@ -12,7 +12,7 @@ export const createUserByUserStatement = db.prepareQuery<
   User,
   CreateUserByUserId
 >(
-  "INSERT INTO users ( email, hashedPassword ) VALUES ( :email, :hashedPassword ) RETURNING * ;",
+  "INSERT INTO users ( username, hashedPassword ) VALUES ( :username, :hashedPassword ) RETURNING * ;",
 );
 
 export const getSingleUserByIdStatement = db.prepareQuery<
@@ -21,11 +21,11 @@ export const getSingleUserByIdStatement = db.prepareQuery<
   GetSingleUserById
 >("SELECT * FROM users WHERE id = :id ;");
 
-export const getSingleUserByEmailStatement = db.prepareQuery<
+export const getSingleUserByUsernameStatement = db.prepareQuery<
   UserTuple,
   User,
-  GetSingleUserByEmail
->("SELECT * FROM users WHERE email = :email ;");
+  GetSingleUserByUsername
+>("SELECT * FROM users WHERE username = :username ;");
 
 export const getAllUsersStatement = db.prepareQuery<UserTuple, User>(
   "SELECT * FROM users;",

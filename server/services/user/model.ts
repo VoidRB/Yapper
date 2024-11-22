@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const userSchema = z.object({
   id: z.number(),
-  email: z.string(),
+  username: z.string(),
   hashedPassword: z.string(),
 });
 
@@ -17,7 +17,7 @@ export const userSpec = z.array(userTuple);
 export type UserSpec = z.infer<typeof userSpec>;
 
 export const createUserByUserSpec = z.object({
-  email: z.string().email(),
+  username: z.string(),
   hashedPassword: z.string(),
 });
 
@@ -29,8 +29,10 @@ export const getSingleUserByIDSpec = z.object({
 
 export type GetSingleUserById = z.infer<typeof getSingleUserByIDSpec>;
 
-export const getSingleUserByEmailSpec = z.object({
-  email: z.string().email(),
+export const getSingleUserByUsernameSpec = z.object({
+  username: z.string(),
 });
 
-export type GetSingleUserByEmail = z.infer<typeof getSingleUserByEmailSpec>;
+export type GetSingleUserByUsername = z.infer<
+  typeof getSingleUserByUsernameSpec
+>;

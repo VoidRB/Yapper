@@ -6,11 +6,9 @@ export const authMiddleware: Middleware = async (ctx: Context, next: Next) => {
   if (!token) {
     ctx.response.status = 401;
     ctx.response.body = { error: "Unauthorized" };
-    console.log(token);
 
     return ctx.response;
   }
-  console.log(token);
 
   const payload = await verifyJwt(token);
   ctx.state.payload = payload;

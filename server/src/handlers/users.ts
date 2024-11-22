@@ -11,19 +11,19 @@ const sessionService = new SessionService();
 
 export async function registerUser(ctx: Context) {
   try {
-    const { email, password } = await ctx.request.body.json();
+    const { username, password } = await ctx.request.body.json();
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-    const userExists = userService.getUserByEmail({ email: email });
+    const userExists = userService.getUserByUsername({ username: username });
 
     if (userExists) {
       ctx.response.status = 400;
-      ctx.response.body = { error: "A user with this email exists" };
+      ctx.response.body = { error: "A user with this username exists" };
       return ctx.response;
     }
 
     const user = userService.createUser({
-      email,
+      username,
       hashedPassword,
     });
     const token = await create(
@@ -38,7 +38,11 @@ export async function registerUser(ctx: Context) {
       token,
       userId: user.id,
     });
-    ctx.response.body = { success: true, message: "User created" };
+    ctx.response.body = {
+      success: true,
+      message: "User created",
+      token: token,
+    };
     ctx.response.status = 201;
     return ctx.response;
   } catch (error: any) {
@@ -49,10 +53,10 @@ export async function registerUser(ctx: Context) {
 }
 
 export async function loginUser(ctx: Context) {
-  const { email, password } = await ctx.request.body.json();
+  const { username, password } = await ctx.request.body.json();
 
   try {
-    const user = userService.getUserByEmail({ email: email });
+    const user = userService.getUserByUsername({ username: username });
 
     if (!user) {
       throw new Error("User not found");

@@ -1,26 +1,26 @@
 import {
   type CreateUserByUserId,
   createUserByUserSpec,
-  type GetSingleUserByEmail,
-  getSingleUserByEmailSpec,
   type GetSingleUserById,
   getSingleUserByIDSpec,
+  type GetSingleUserByUsername,
+  getSingleUserByUsernameSpec,
 } from "./model.ts";
 
 import {
   createUserByUserStatement,
   getAllUsersStatement,
-  getSingleUserByEmailStatement,
   getSingleUserByIdStatement,
+  getSingleUserByUsernameStatement,
 } from "./statements.ts";
 
 export class UserService {
   constructor() {}
 
   createUser(data: CreateUserByUserId) {
-    const { email, hashedPassword } = createUserByUserSpec.parse(data);
+    const { username, hashedPassword } = createUserByUserSpec.parse(data);
     const [user] = createUserByUserStatement.allEntries({
-      email,
+      username,
       hashedPassword,
     });
     return user;
@@ -34,10 +34,10 @@ export class UserService {
 
     return user;
   }
-  getUserByEmail(data: GetSingleUserByEmail) {
-    const { email } = getSingleUserByEmailSpec.parse(data);
-    const [user] = getSingleUserByEmailStatement.allEntries({
-      email,
+  getUserByUsername(data: GetSingleUserByUsername) {
+    const { username } = getSingleUserByUsernameSpec.parse(data);
+    const [user] = getSingleUserByUsernameStatement.allEntries({
+      username,
     });
 
     return user;
