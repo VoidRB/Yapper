@@ -1,23 +1,41 @@
 <script setup>
-import { ref } from "vue";
+import axios from "axios";
+import { onMounted, ref } from "vue";
 
-const webSocket = new WebSocket(`ws://localhost:5007`);
+const webSocket = new WebSocket(`ws://localhost:5005/`);
 
 const inputText = ref("");
+const tempText = ref("");
 
 const texts = ref([]);
+
+onMounted(async () => {
+  console.log(`Chat hit`);
+  try {
+    const response = await axios.get("http://localhost:5005/chat/open", {
+      headers: {
+        upgrade: "webSocket",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImV4cCI6MTczMjM1MTA4MH0.yid2mws-LMCwB4XJKHuzMvou-HdA4E3G8Wkk4RPYjAE2UDjQ73-Xli7d5bUMi9t88MtyJh_eYjBJFaPk1oy_NQ",
+      },
+    });
+    console.log(response.data);
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 const SendMessage = () => {
   if (inputText.value === "") {
   } else {
-    webSocket.send(`${inputText.value}`);
+    // webSocket.send(`${inputText.value}`);
     console.log(`Sent ${inputText.value}`);
   }
 };
 
-webSocket.addEventListener("message", (event) => {
-  texts.value.push(event.data);
-});
+// webSocket.addEventListener("message", (event) => {
+//   texts.value.push(event.data);
+// });
 </script>
 <template>
   <div
@@ -32,6 +50,7 @@ webSocket.addEventListener("message", (event) => {
       >
         {{ text }}
       </h1>
+      <h1>{{ tempText }}</h1>
     </section>
     <section class="my-5 flex w-full items-center justify-center">
       <div class="w-full px-10">

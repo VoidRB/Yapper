@@ -4,46 +4,46 @@ import { SessionService } from "../../services/session/service.ts";
 import * as bcrypt from "bcrypt";
 import { create, getNumericDate } from "djwt";
 import { ENCRYPTION_KEY } from "../../config/ENCRYPTION_KEY.ts";
-import { Context } from "@oak/oak";
+import { Context, Response } from "@oak/oak";
 
 const userService = new UserService();
 const sessionService = new SessionService();
 
-export async function registerUser(ctx: Context) {
+export async function registerUser(ctx: Context): Promise<Response> {
   try {
     const { username, password } = await ctx.request.body.json();
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     const userExists = userService.getUserByUsername({ username: username });
 
-    if (userExists) {
-      ctx.response.status = 400;
-      ctx.response.body = { error: "A user with this username exists" };
+    if (!userExists) {
+      const user = userService.createUser({
+        username,
+        hashedPassword,
+      });
+      const token = await create(
+        { alg: "HS512", typ: "JWT" },
+        { userId: user.id, exp: getNumericDate(60 * 30) },
+        ENCRYPTION_KEY,
+      );
+      // TODO: session must be securely stored (client) and properly expired
+      sessionService.createUserSession({
+        ip: ctx.request.headers.get("x-forwarded-for") || "unknown",
+        userAgent: ctx.request.headers.get("user-agent") || "unknown",
+        token,
+        userId: user.id,
+      });
+      ctx.response.body = {
+        success: true,
+        message: "User created",
+        token: token,
+      };
+      ctx.response.status = 201;
       return ctx.response;
     }
 
-    const user = userService.createUser({
-      username,
-      hashedPassword,
-    });
-    const token = await create(
-      { alg: "HS512", typ: "JWT" },
-      { userId: user.id, exp: getNumericDate(60 * 30) },
-      ENCRYPTION_KEY,
-    );
-    // TODO: session must be securely stored (client) and properly expired
-    sessionService.createUserSession({
-      ip: ctx.request.headers.get("x-forwarded-for") || "unknown",
-      userAgent: ctx.request.headers.get("user-agent") || "unknown",
-      token,
-      userId: user.id,
-    });
-    ctx.response.body = {
-      success: true,
-      message: "User created",
-      token: token,
-    };
-    ctx.response.status = 201;
+    ctx.response.status = 400;
+    ctx.response.body = { error: "A user with this username exists" };
     return ctx.response;
   } catch (error: any) {
     ctx.response.body = { error: error.message };
@@ -52,34 +52,35 @@ export async function registerUser(ctx: Context) {
   }
 }
 
-export async function loginUser(ctx: Context) {
+export async function loginUser(ctx: Context): Promise<Response> {
   const { username, password } = await ctx.request.body.json();
 
   try {
     const user = userService.getUserByUsername({ username: username });
 
-    if (!user) {
-      throw new Error("User not found");
-    }
+    if (user) {
+      const passwordMatch = await bcrypt.compare(password, user.hashedPassword);
+      if (!passwordMatch) {
+        throw new Error("Invalid credentials");
+      }
+      const token = await create(
+        { alg: "HS512", typ: "JWT" },
+        { userId: user.id },
+        ENCRYPTION_KEY,
+      );
 
-    const passwordMatch = await bcrypt.compare(password, user.hashedPassword);
-    if (!passwordMatch) {
-      throw new Error("Invalid credentials");
+      sessionService.createUserSession({
+        ip: ctx.request.headers.get("x-forwarded-for") || "unknown",
+        userAgent: ctx.request.headers.get("user-agent") || "unknown",
+        token,
+        userId: user.id,
+      });
+      ctx.response.status = 200;
+      ctx.response.body = { success: true, message: "User logged in", token };
+      return ctx.response;
     }
-    const token = await create(
-      { alg: "HS512", typ: "JWT" },
-      { userId: user.id },
-      ENCRYPTION_KEY,
-    );
-
-    sessionService.createUserSession({
-      ip: ctx.request.headers.get("x-forwarded-for") || "unknown",
-      userAgent: ctx.request.headers.get("user-agent") || "unknown",
-      token,
-      userId: user.id,
-    });
-    ctx.response.status = 200;
-    ctx.response.body = { success: true, message: "User logged in", token };
+    ctx.response.status = 400;
+    ctx.response.body = { success: false, message: "User doesn't exist" };
     return ctx.response;
   } catch (error: any) {
     ctx.response.status = 401;
@@ -88,7 +89,7 @@ export async function loginUser(ctx: Context) {
   }
 }
 
-export function getUsers(ctx: Context) {
+export function getUsers(ctx: Context): Response {
   const users = userService.getAllUsers();
   ctx.response.status = 200;
   ctx.response.body = { users };

@@ -1,12 +1,12 @@
 // deno-lint-ignore-file no-explicit-any
 
-import { Context } from "@oak/oak";
+import { Context, Response } from "@oak/oak";
 import { MessageService } from "../../services/message/service.ts";
 import { verifyJwt } from "./sessions.ts";
 
 const messageService = new MessageService();
 
-export async function sendMessage(ctx: Context) {
+export async function sendMessage(ctx: Context): Promise<Response> {
   const token = ctx.request.headers.get("Authorization")?.split(" ")[1];
   if (!token) {
     ctx.response.status = 401;
@@ -33,7 +33,7 @@ export async function sendMessage(ctx: Context) {
   }
 }
 
-export async function getMessagesSent(ctx: Context) {
+export async function getMessagesSent(ctx: Context): Promise<Response> {
   const token = ctx.request.headers.get("Authorization")?.split(" ")[1];
   if (!token) {
     ctx.response.status = 401;
@@ -56,7 +56,7 @@ export async function getMessagesSent(ctx: Context) {
   }
 }
 
-export async function getMessagesRecieved(ctx: Context) {
+export async function getMessagesRecieved(ctx: Context): Promise<Response> {
   const token = ctx.request.headers.get("Authorization")?.split(" ")[1];
   if (!token) {
     ctx.response.status = 401;
@@ -80,7 +80,7 @@ export async function getMessagesRecieved(ctx: Context) {
   }
 }
 
-export function getAllMessages(ctx: Context) {
+export function getAllMessages(ctx: Context): Response {
   try {
     const [messages] = messageService.getMessages();
 
