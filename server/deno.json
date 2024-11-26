@@ -13,6 +13,7 @@
     "socket.io": "https://deno.land/x/socket_io@0.2.0/mod.ts",
     "cors": "https://deno.land/x/cors@v1.2.2/mod.ts",
     "zod": "https://deno.land/x/zod@v3.23.8/mod.ts",
+    "denoHttp": "https://deno.land/std@0.150.0/http/server.ts",
     "bcrypt": "npm:bcrypt@^5.1.1"
   }
 }

@@ -33,14 +33,14 @@ const switchTheme = () => {
       <section>
         <RouterLink
           :to="{ name: 'Home' }"
-          class="text-2xl font-bold text-CLACCPrimary drop-shadow-sm hover:text-CLACCSecondary focus:outline-none active:underline md:ml-12 dark:text-CDACCPrimary hover:dark:text-CDACCSecondary"
+          class="text-2xl font-bold text-CLACCPrimary drop-shadow-sm hover:text-CLACCSecondary focus:underline focus:outline-none md:ml-12 dark:text-CDACCPrimary hover:dark:text-CDACCSecondary"
         >
           Yapper
         </RouterLink>
       </section>
       <section class="flex items-center justify-center gap-4">
         <button
-          class="text-CLACCPrimary hover:text-CLACCSecondary focus:outline-none active:underline dark:text-CDACCPrimary hover:dark:text-CDACCSecondary"
+          class="text-CLACCPrimary hover:text-CLACCSecondary focus:underline focus:outline-none dark:text-CDACCPrimary hover:dark:text-CDACCSecondary"
           @click="switchTheme"
         >
           Switch Mode

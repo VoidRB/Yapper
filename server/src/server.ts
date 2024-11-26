@@ -1,10 +1,12 @@
 import "@std/dotenv/load";
 import { Application } from "@oak/oak";
 import { oakCors } from "cors";
+import { serve } from "denoHttp";
+
 import userRouter from "./routes/userRoutes.ts";
 import chatRouter from "./routes/chatRoutes.ts";
 import io from "./handlers/chat.ts";
-import { serve } from "https://deno.land/std@0.150.0/http/server.ts";
+
 const port = Number(Deno.env.get("PORT")) || 5000;
 
 const app = new Application();

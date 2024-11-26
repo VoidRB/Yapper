@@ -16,7 +16,12 @@ const formState = ref(true);
       Welcome to
       <span class="text-CLACCSecondary dark:text-CDACCSecondary">Yapper </span>!
     </h1>
-    <button @click="formState = !formState">Switch</button>
+    <button
+      @click="formState = !formState"
+      class="text-CLACCPrimary focus:underline focus:outline-none active:text-CLACCSecondary dark:text-CDACCPrimary dark:active:text-CDACCSecondary"
+    >
+      Switch
+    </button>
     <LoginForm v-if="formState" />
     <RegisterForm v-else />
   </div>

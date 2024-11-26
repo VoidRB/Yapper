@@ -5,8 +5,8 @@ import { ref } from "vue";
 
 const inputText = ref("");
 
-const socket = io("http://localhost:5005/", {
-  withCredentials: true,
+const socket = io("http://localhost:5005", {
+  path: "/chat/",
 });
 
 const SendMessage = () => {
@@ -38,9 +38,9 @@ const SendMessage = () => {
       <div>
         <button
           @click="SendMessage(inputText), (inputText = '')"
-          class="mr-10 size-10 rounded-full border-b-2 border-CLACCPrimary text-3xl font-extrabold text-CLACCPrimary shadow-2xl ring-2 ring-CLACCPrimary hover:shadow-black focus:border-s-CLACCSecondary focus:outline-none focus:ring-CLACCSecondary active:border-b-0 active:border-t-2 active:border-CLACCSecondary active:bg-none active:text-CLACCSecondary active:shadow-inner active:ring-CLACCSecondary dark:border-CDACCPrimary dark:text-CDACCPrimary dark:ring-CDACCPrimary dark:focus:border-CDACCSecondary dark:focus:ring-CDACCSecondary dark:active:border-CDACCSecondary dark:active:text-CDACCSecondary dark:active:ring-CDACCSecondary"
+          class="mr-10 size-10 select-none rounded-full border-b-2 border-CLACCPrimary text-3xl font-extrabold text-CLACCPrimary shadow-2xl ring-2 ring-CLACCPrimary hover:bg-white hover:bg-opacity-20 hover:shadow-black focus:text-CLACCSecondary focus:outline-none active:border-b-0 active:border-t-2 active:border-CLACCSecondary active:bg-none active:text-CLACCSecondary active:shadow-inner active:ring-CLACCSecondary dark:border-CDACCPrimary dark:text-CDACCPrimary dark:ring-CDACCPrimary dark:focus:text-CDACCSecondary dark:active:border-CDACCSecondary dark:active:text-CDACCSecondary dark:active:ring-CDACCSecondary"
         >
-          >
+          <i>></i>
         </button>
       </div>
     </section>

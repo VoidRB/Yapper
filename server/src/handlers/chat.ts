@@ -1,6 +1,7 @@
 import { Server } from "socket.io";
 
 const io = new Server({
+  path: "/chat/",
   cors: {
     origin: true,
     credentials: true,
@@ -18,7 +19,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("newMSG", (p) => {
-    console.log(`new msg  : ${p}`);
+    console.log(`new msg : ${p}`);
     io.emit("sendallMSG", { data: p });
   });
 });
