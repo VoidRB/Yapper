@@ -18,6 +18,6 @@ app.use(userRouter.allowedMethods());
 app.use(chatRouter.allowedMethods());
 
 const handler = io.handler(async (req) => {
-	return (await app.handle(req)) || new Response(null, { status: 404 });
+  return (await app.handle(req)) || new Response(null, { status: 404 });
 });
 await serve(handler, { port: port });

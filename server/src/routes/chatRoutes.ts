@@ -22,7 +22,7 @@ const router = new Router();
 router.get("/chat/close", (_ctx: Context) => {});
 
 router.get("/chat/messages/all", (ctx: Context) => {
-	getAllMessages(ctx);
+  getAllMessages(ctx);
 });
 
 export default router;

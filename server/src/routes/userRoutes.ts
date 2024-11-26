@@ -4,14 +4,14 @@ import { getUsers, loginUser, registerUser } from "../handlers/users.ts";
 const router = new Router();
 
 router.post("/register", async (ctx: Context) => {
-	await registerUser(ctx);
+  await registerUser(ctx);
 });
 router.post("/login", async (ctx: Context) => {
-	await loginUser(ctx);
+  await loginUser(ctx);
 });
 //for testing
 router.get("/login/all", (ctx) => {
-	getUsers(ctx);
+  getUsers(ctx);
 });
 
 export default router;
