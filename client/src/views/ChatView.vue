@@ -4,7 +4,7 @@ import ChattingSpace from "@/components/ChattingSpace.vue";
 </script>
 
 <template>
-  <div class="flex h-full w-full transition-colors">
+  <div class="flex size-full transition-colors">
     <ChatsBar />
     <ChattingSpace />
   </div>

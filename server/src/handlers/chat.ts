@@ -14,13 +14,23 @@ const io = new Server({
 io.on("connection", (socket) => {
   console.log(`socket user ${socket.id} connected`);
 
+  io.to(socket.id).emit("userConnId", { id: socket.id });
+
   socket.on("disconnect", (reason) => {
     console.log(`User ${socket.id} disconnected reason : ${reason}`);
   });
 
-  socket.on("newMSG", (p) => {
-    console.log(`new msg : ${p}`);
-    io.emit("sendallMSG", { data: p });
+  socket.on("join room", (roomName, _cb) => {
+    //TODO toDataBase service here
+    //[ ] set user id(s)
+    //[ ] send msg to appropriate users
+    socket.join(roomName);
+    // cb(messages[roomName]);
+  });
+
+  socket.on("newMSG", (msg) => {
+    console.log(`new msg : ${msg}`);
+    io.emit("sendallMSG", { msg: msg, id: socket.id });
   });
 });
 

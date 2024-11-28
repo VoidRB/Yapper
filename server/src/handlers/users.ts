@@ -69,17 +69,21 @@ export async function loginUser(ctx: Context): Promise<Response> {
         { userId: user.id },
         ENCRYPTION_KEY,
       );
-      //TODO : remove existing session and replace it with a new one whenever a user logs in
+
+      sessionService.removeSession({ userId: user.id });
+
       sessionService.createUserSession({
         ip: ctx.request.headers.get("x-forwarded-for") || "unknown",
         userAgent: ctx.request.headers.get("user-agent") || "unknown",
         token,
         userId: user.id,
       });
+
       ctx.response.status = 200;
       ctx.response.body = { success: true, message: "User logged in", token };
       return ctx.response;
     }
+
     ctx.response.status = 400;
     ctx.response.body = { success: false, message: "User doesn't exist" };
     return ctx.response;

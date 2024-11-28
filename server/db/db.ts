@@ -22,6 +22,7 @@ db.execute(`
   )
 `);
 //MESSAGE TABLE
+//TODO new column for either users or rooms/groups
 db.execute(`
   CREATE TABLE IF NOT EXISTS message (
     id INTEGER PRIMARY KEY AUTOINCREMENT,

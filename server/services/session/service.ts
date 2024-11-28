@@ -1,11 +1,14 @@
 import {
   type CreateSessionByUserId,
   createSessionByUserIdSpec,
+  RemoveSessionByUserId,
+  removeSessionByUserIdSpec,
 } from "./model.ts";
 
 import {
   createSessionByUserStatement,
   getAllSessionsStatement,
+  removeSessionByUserIdStatement,
 } from "./statements.ts";
 
 export class SessionService {
@@ -22,6 +25,14 @@ export class SessionService {
       userId,
     });
     return session;
+  }
+
+  removeSession(data: RemoveSessionByUserId) {
+    const { userId } = removeSessionByUserIdSpec.parse(data);
+    const removedSession = removeSessionByUserIdStatement.allEntries({
+      userId,
+    });
+    return removedSession;
   }
 
   getSessions() {
