@@ -8,9 +8,6 @@ const io = new Server({
   },
 });
 
-//[ ] : clean up the socket.io and make it more suitable for 1-1 chats
-//[ ] : call the message service every 50 messages from user to user
-
 io.on("connection", (socket) => {
   console.log(`socket user ${socket.id} connected`);
 
@@ -21,7 +18,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("join room", (roomName, _cb) => {
-    //TODO toDataBase service here
+    //TODO toDatabase service here
     //[ ] set user id(s)
     //[ ] send msg to appropriate users
     socket.join(roomName);
@@ -33,5 +30,8 @@ io.on("connection", (socket) => {
     io.emit("sendallMSG", { msg: msg, id: socket.id });
   });
 });
+
+//[ ] : clean up the socket.io and make it more suitable for 1-1 chats
+//[ ] : call the message service every 50 messages from user to user
 
 export default io;

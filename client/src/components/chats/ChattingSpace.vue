@@ -1,34 +1,28 @@
 <script setup>
 //TODO fix the front-end and its navigation
-import { io } from "socket.io-client";
+import { Socket } from "socket.io-client";
 import { ref } from "vue";
 import Messages from "./Messages.vue";
 
+const props = defineProps({
+  socket: Socket,
+});
+
 const inputText = ref("");
 const texts = ref([]);
-// const user = ref({});
 const userId = ref("");
-const otherId = ref("");
 
-const socket = io("http://localhost:5005", {
-  path: "/chat/",
-});
-
-// user.value = JSON.parse(sessionStorage.getItem("Login-user-data"));
-
-socket.on("sendallMSG", (msg) => {
+props.socket.on("sendallMSG", (msg) => {
   texts.value.push(msg);
-  otherId.value = msg.id;
 });
 
-socket.on("userConnId", (msg) => {
+props.socket.on("userConnId", (msg) => {
   userId.value = msg.id;
 });
 
 const SendMessage = () => {
-  if (inputText.value === "") {
-  } else {
-    socket.emit("newMSG", inputText.value);
+  if (inputText.value.trim(" ")) {
+    props.socket.emit("newMSG", inputText.value);
     console.log(`Sent ${inputText.value}`);
   }
 };
@@ -37,12 +31,7 @@ const SendMessage = () => {
   <div
     class="flex size-full flex-col justify-between border-2 border-CLACCPrimary bg-CLBGSecondary shadow-inner shadow-black lg:w-5/6 dark:border-CDACCPrimary dark:bg-CDBGSecondary"
   >
-    <section
-      class="my-2 flex max-h-full w-full flex-col gap-1 overflow-y-scroll p-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-    >
-      <Messages :texts="texts" :userId="userId" :otherId="otherId" />
-    </section>
-
+    <Messages :texts="texts" :userId="userId" />
     <section class="bg-whi my-5 flex w-full items-center justify-center">
       <div class="w-full px-10">
         <input

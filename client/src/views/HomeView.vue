@@ -1,6 +1,28 @@
-<script setup>
-import HomeComponent from "@/components/HomeComponent.vue";
+<script setup lang="ts">
+import LoginForm from "@/components/Home/LoginForm.vue";
+import RegisterForm from "@/components/Home/RegisterForm.vue";
+import { ref } from "vue";
+
+const formState = ref(true);
 </script>
+
 <template>
-  <HomeComponent />
+  <div
+    class="flex size-full flex-col items-center justify-center gap-10 bg-CLBGSecondary transition-colors dark:bg-CDBGSecondary"
+  >
+    <h1
+      class="text-center text-5xl font-bold text-CLACCPrimary dark:text-CDACCPrimary"
+    >
+      Welcome to
+      <span class="text-CLACCSecondary dark:text-CDACCSecondary">Yapper </span>!
+    </h1>
+    <button
+      @click="formState = !formState"
+      class="text-CLACCPrimary focus:underline focus:outline-none active:text-CLACCSecondary dark:text-CDACCPrimary dark:active:text-CDACCSecondary"
+    >
+      Switch
+    </button>
+    <LoginForm v-if="formState" />
+    <RegisterForm v-else />
+  </div>
 </template>
