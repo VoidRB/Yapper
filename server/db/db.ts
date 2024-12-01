@@ -31,10 +31,18 @@ db.execute(`
     content STRING 
   )
 `);
+console.log(`Registered Users`);
+db.queryEntries("SELECT * FROM users;").forEach((user) => {
+  console.log(`id : ${user.id}  | Name : ${user.username}`);
+});
+console.log(`Registered Sessions`);
 
-console.log(db.query("SELECT * FROM users;"));
-console.log(db.query("SELECT * FROM sessions;"));
-console.log(db.query("SELECT * FROM message;"));
+db.queryEntries("SELECT * FROM sessions;").forEach((session) => {
+  console.log(`id : ${session.id} | userId :  ${session.userId}`);
+});
+db.queryEntries("SELECT * FROM message;").forEach((message) => {
+  console.log(`id : ${message.id}`);
+});
 // db.close();
 
 export default db;

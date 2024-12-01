@@ -11,7 +11,6 @@ onMounted(async () => {
     usersList.value = response.data.users;
   } catch (error) {}
 });
-// usersList[0].username;
 </script>
 <template>
   <section

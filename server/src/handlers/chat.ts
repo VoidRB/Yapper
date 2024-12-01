@@ -1,4 +1,5 @@
 import { Server } from "socket.io";
+import { socketMiddleware } from "../middleware/socketAuth.ts";
 
 const io = new Server({
   path: "/chat/",
@@ -7,6 +8,8 @@ const io = new Server({
     credentials: true,
   },
 });
+
+io.use(socketMiddleware);
 
 io.on("connection", (socket) => {
   console.log(`socket user ${socket.id} connected`);

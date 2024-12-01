@@ -4,13 +4,12 @@ import { Socket } from "socket.io-client";
 import { ref } from "vue";
 import Messages from "./Messages.vue";
 
+const userId = ref("");
+const inputText = ref("");
+const texts = ref([]);
 const props = defineProps({
   socket: Socket,
 });
-
-const inputText = ref("");
-const texts = ref([]);
-const userId = ref("");
 
 props.socket.on("sendallMSG", (msg) => {
   texts.value.push(msg);
