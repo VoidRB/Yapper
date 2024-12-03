@@ -36,6 +36,7 @@ export async function registerUser(ctx: Context): Promise<Response> {
       ctx.response.body = {
         success: true,
         message: "User created",
+        name: user.username,
         token,
       };
 
@@ -80,7 +81,12 @@ export async function loginUser(ctx: Context): Promise<Response> {
       });
 
       ctx.response.status = 200;
-      ctx.response.body = { success: true, message: "User logged in", token };
+      ctx.response.body = {
+        success: true,
+        message: "User logged in",
+        name: user.username,
+        token,
+      };
       return ctx.response;
     }
 

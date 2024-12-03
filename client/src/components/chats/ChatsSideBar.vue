@@ -1,15 +1,19 @@
 <script setup>
-import axios from "axios";
-import { onMounted, ref } from "vue";
+import { Socket } from "socket.io-client";
+import { ref } from "vue";
+
+const props = defineProps({
+  socket: Socket,
+});
 
 const usersList = ref([]);
 
-// TODO add the list of users the user is familiar with here
-onMounted(async () => {
-  try {
-    const response = await axios.get("/api/login/all");
-    usersList.value = response.data.users;
-  } catch (error) {}
+const chatWithPickedUser = (user) => {
+  props.socket.emit("chatWith", user.id);
+};
+
+props.socket.on("users", (users) => {
+  usersList.value = users;
 });
 </script>
 <template>
@@ -18,6 +22,7 @@ onMounted(async () => {
   >
     <div v-for="user in usersList">
       <button
+        @click.prevent="chatWithPickedUser(user)"
         class="mb-2 w-full cursor-pointer justify-center p-2 text-CLACCPrimary shadow-black ring-1 ring-CLACCPrimary transition-all hover:bg-CLBGSecondary hover:p-3 hover:text-CLACCSecondary hover:shadow-2xl hover:ring-CLACCSecondary focus:outline-none dark:bg-CDBGPrimary dark:text-CDACCPrimary dark:ring-CDACCPrimary dark:hover:bg-CDBGSecondary hover:dark:text-CDACCSecondary hover:dark:ring-CDACCSecondary"
       >
         <h1 class="capitalize shadow-black drop-shadow-md">

@@ -16,12 +16,15 @@ const socket = io("http://localhost:5005", {
   extraHeaders: {
     Authorization: `Bearer ${user.value.token}`,
   },
+  auth: {
+    name: user.value.name,
+  },
 });
 </script>
 
 <template>
   <div class="flex h-screen w-full transition-all">
-    <ChatsSideBar />
+    <ChatsSideBar :socket="socket" />
     <ChattingSpace :socket="socket" />
   </div>
 </template>

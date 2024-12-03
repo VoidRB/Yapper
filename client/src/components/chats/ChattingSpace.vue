@@ -21,7 +21,7 @@ props.socket.on("userConnId", (msg) => {
 
 const SendMessage = () => {
   if (inputText.value.trim(" ")) {
-    props.socket.emit("newMSG", inputText.value);
+    props.socket.emit("newMessage", inputText.value);
     console.log(`Sent ${inputText.value}`);
   }
 };

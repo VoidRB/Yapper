@@ -31,6 +31,7 @@ db.execute(`
     content STRING 
   )
 `);
+
 console.log(`Registered Users`);
 db.queryEntries("SELECT * FROM users;").forEach((user) => {
   console.log(`id : ${user.id}  | Name : ${user.username}`);
@@ -41,7 +42,7 @@ db.queryEntries("SELECT * FROM sessions;").forEach((session) => {
   console.log(`id : ${session.id} | userId :  ${session.userId}`);
 });
 db.queryEntries("SELECT * FROM message;").forEach((message) => {
-  console.log(`id : ${message.id}`);
+  console.log(`id : ${message.id} | content : ${message.content}`);
 });
 // db.close();
 
