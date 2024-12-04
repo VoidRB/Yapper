@@ -12,7 +12,7 @@ const userError = ref(Boolean);
 const router = useRouter();
 
 const register = async () => {
-  if (chatUsername.value.length > 6 && chatPassword.value.length > 6) {
+  if (chatUsername.value.length > 0 && chatPassword.value.length > 0) {
     try {
       const response = await axios.post(`/api/register`, {
         username: chatUsername.value,
