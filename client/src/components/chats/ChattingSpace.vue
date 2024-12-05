@@ -32,7 +32,7 @@ const SendMessage = () => {
   >
     <Messages :texts="texts" :userId="userId" />
     <section class="my-5 flex w-full items-center justify-end">
-      <div class="w-3/4 px-10 md:w-5/6 lg:w-full">
+      <div class="w-2/3 px-10 md:w-5/6 lg:w-full">
         <input
           @keypress.enter="SendMessage(inputText)"
           @keyup.enter="inputText = ''"
@@ -45,9 +45,9 @@ const SendMessage = () => {
       <div>
         <button
           @click="(SendMessage(inputText), (inputText = ''))"
-          class="mr-10 size-10 select-none rounded-full border-b-2 border-CLACCPrimary text-3xl font-extrabold text-CLACCPrimary shadow-2xl ring-2 ring-CLACCPrimary hover:bg-white hover:bg-opacity-20 hover:shadow-black focus:text-CLACCSecondary focus:outline-none active:border-b-0 active:border-t-2 active:border-CLACCSecondary active:bg-none active:text-CLACCSecondary active:shadow-inner active:ring-CLACCSecondary dark:border-CDACCPrimary dark:text-CDACCPrimary dark:ring-CDACCPrimary dark:focus:text-CDACCSecondary dark:active:border-CDACCSecondary dark:active:text-CDACCSecondary dark:active:ring-CDACCSecondary"
+          class="mr-10 flex size-12 items-center justify-center rounded-full border-b-2 border-CLACCPrimary text-CLACCPrimary shadow-2xl ring-2 ring-CLACCPrimary hover:bg-white hover:bg-opacity-20 hover:shadow-black focus:text-CLACCSecondary focus:outline-none active:border-b-0 active:border-t-2 active:border-CLACCSecondary active:bg-none active:text-CLACCSecondary active:shadow-inner active:ring-CLACCSecondary dark:border-CDACCPrimary dark:text-CDACCPrimary dark:ring-CDACCPrimary dark:focus:text-CDACCSecondary dark:active:border-CDACCSecondary dark:active:text-CDACCSecondary dark:active:ring-CDACCSecondary"
         >
-          <i>></i>
+          <i class="pi pi-send text-2xl"></i>
         </button>
       </div>
     </section>

@@ -18,10 +18,7 @@ const register = async () => {
         username: chatUsername.value,
         password: chatPassword.value,
       });
-      sessionStorage.setItem(
-        "Register-user-data",
-        JSON.stringify(response.data),
-      );
+      localStorage.setItem("Register-user-data", JSON.stringify(response.data));
       router.push({ name: "Chats" });
     } catch (error) {
       throw error;
