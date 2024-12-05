@@ -4,6 +4,7 @@ import { ref } from "vue";
 
 const usersList = ref([]);
 const savedUser = ref("");
+const sideBarStatus = ref(Boolean);
 const props = defineProps({
   socket: Socket,
 });
@@ -14,19 +15,37 @@ savedUser.value = JSON.parse(
 );
 
 const chatWithPickedUser = (user) => {
-  props.socket.emit("chatWith", user.id);
+  props.socket.on("private message", {});
 };
 
 props.socket.on("users", (users) => {
   usersList.value = users;
 });
+
+sideBarStatus.value = false;
+const sideBarVisibility = () => {
+  if (sideBarStatus.value) {
+    document.getElementById("sidebar").classList.remove("translate-x-0");
+    document.getElementById("sidebar").classList.add("-translate-x-full");
+    sideBarStatus.value = false;
+  } else {
+    document.getElementById("sidebar").classList.add("translate-x-0");
+    document.getElementById("sidebar").classList.remove("-translate-x-full");
+    sideBarStatus.value = true;
+  }
+};
 </script>
 <template>
+  <button
+    class="absolute bottom-7 left-4 z-10 size-10 rounded-full text-3xl font-extrabold text-CLACCPrimary shadow-2xl ring-2 ring-CLACCPrimary hover:bg-white hover:bg-opacity-20 hover:shadow-black focus:text-CLACCSecondary focus:outline-none active:bg-none active:text-CLACCSecondary active:shadow-inner active:ring-CLACCSecondary lg:hidden dark:border-CDACCPrimary dark:text-CDACCPrimary dark:ring-CDACCPrimary dark:focus:text-CDACCSecondary dark:active:border-CDACCSecondary dark:active:text-CDACCSecondary dark:active:ring-CDACCSecondary"
+    @click="sideBarVisibility()"
+  ></button>
   <section
-    class="hidden h-full w-1/6 flex-col bg-CLBGPrimary lg:flex dark:bg-CDBGPrimary"
+    id="sidebar"
+    class="fixed z-0 h-full w-96 -translate-x-full flex-col border-2 border-l-0 border-CLACCPrimary bg-CLBGPrimary transition-all lg:relative lg:translate-x-0 lg:border-0 dark:border-CDACCPrimary dark:bg-CDBGPrimary"
   >
     <h1
-      class="mb-3 text-center text-xl font-bold text-CLACCSecondary dark:text-CDACCSecondary"
+      class="my-3 text-center text-xl font-bold text-CLACCSecondary dark:text-CDACCSecondary"
     >
       Online Users :
     </h1>

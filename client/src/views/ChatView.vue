@@ -23,7 +23,7 @@ const socket = io("http://localhost:5005", {
 </script>
 
 <template>
-  <div class="flex h-screen w-full transition-all">
+  <div class="flex h-screen w-full justify-normal transition-all">
     <ChatsSideBar :socket="socket" />
     <ChattingSpace :socket="socket" />
   </div>

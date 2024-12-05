@@ -26,8 +26,10 @@ const onConnection = (socket: Socket) => {
     io.emit("sendallMSG", { msg: msg, id: socket.id, username: username });
   });
 
-  socket.on("chatWith", (userSocketID) => {
-    socket.join(userSocketID);
+  socket.on("private message", ({ content, to }) => {
+    socket
+      .to(to)
+      .emit("private message", { content, from: socket.id, username });
   });
 };
 

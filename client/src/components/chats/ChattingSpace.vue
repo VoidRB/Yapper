@@ -31,8 +31,8 @@ const SendMessage = () => {
     class="flex size-full flex-col justify-between border-2 border-CLACCPrimary bg-CLBGSecondary shadow-inner shadow-black lg:w-5/6 dark:border-CDACCPrimary dark:bg-CDBGSecondary"
   >
     <Messages :texts="texts" :userId="userId" />
-    <section class="bg-whi my-5 flex w-full items-center justify-center">
-      <div class="w-full px-10">
+    <section class="my-5 flex w-full items-center justify-end">
+      <div class="w-3/4 px-10 md:w-5/6 lg:w-full">
         <input
           @keypress.enter="SendMessage(inputText)"
           @keyup.enter="inputText = ''"
