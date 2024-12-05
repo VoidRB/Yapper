@@ -2,9 +2,6 @@
 import { Socket } from "socket.io-client";
 import { ref } from "vue";
 
-const sidebarButton = document.getElementById("sidebarButton");
-const sidebar = document.getElementById("sidebar");
-
 const usersList = ref([]);
 const savedUser = ref("");
 const sideBarStatus = ref(Boolean);
@@ -27,20 +24,20 @@ props.socket.on("users", (users) => {
 
 sideBarStatus.value = false;
 const sideBarVisibility = () => {
+  const sidebar = document.getElementById("sidebar");
+  const sidebarButton = document.getElementById("sidebarButton");
   if (sideBarStatus.value) {
-    document.getElementById("sidebar").classList.remove("translate-x-0");
-    document.getElementById("sidebar").classList.add("-translate-x-full");
-    document.getElementById("sidebarButton").classList.add("pi-users");
-    document.getElementById("sidebarButton").classList.remove("pi-times");
-    document.getElementById("sidebarButton").classList.remove("rotate-90");
+    sidebar.classList.remove("translate-x-0");
+    sidebar.classList.add("-translate-x-full");
+    sidebarButton.classList.add("pi-users");
+    sidebarButton.classList.remove("pi-times", "rotate-90");
 
     sideBarStatus.value = false;
   } else {
-    document.getElementById("sidebar").classList.add("translate-x-0");
-    document.getElementById("sidebar").classList.remove("-translate-x-full");
-    document.getElementById("sidebarButton").classList.remove("pi-users");
-    document.getElementById("sidebarButton").classList.add("pi-times");
-    document.getElementById("sidebarButton").classList.add("rotate-90");
+    sidebar.classList.add("translate-x-0");
+    sidebar.classList.remove("-translate-x-full");
+    sidebarButton.classList.remove("pi-users");
+    sidebarButton.classList.add("pi-times", "rotate-90");
     sideBarStatus.value = true;
   }
 };
