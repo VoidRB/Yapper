@@ -47,7 +47,7 @@ const SendMessage = () => {
           @click="(SendMessage(inputText), (inputText = ''))"
           class="mr-10 flex size-12 items-center justify-center rounded-full border-b-2 border-CLACCPrimary text-CLACCPrimary shadow-2xl ring-2 ring-CLACCPrimary hover:bg-white hover:bg-opacity-20 hover:shadow-black focus:text-CLACCSecondary focus:outline-none active:border-b-0 active:border-t-2 active:border-CLACCSecondary active:bg-none active:text-CLACCSecondary active:shadow-inner active:ring-CLACCSecondary dark:border-CDACCPrimary dark:text-CDACCPrimary dark:ring-CDACCPrimary dark:focus:text-CDACCSecondary dark:active:border-CDACCSecondary dark:active:text-CDACCSecondary dark:active:ring-CDACCSecondary"
         >
-          <i class="pi pi-send text-2xl"></i>
+          <i class="pi pi-send mr-0.5 mt-1 text-2xl"></i>
         </button>
       </div>
     </section>

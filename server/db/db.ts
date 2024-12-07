@@ -41,6 +41,9 @@ console.log(`Registered Sessions`);
 db.queryEntries("SELECT * FROM sessions;").forEach((session) => {
   console.log(`id : ${session.id} | userId :  ${session.userId}`);
 });
+
+console.log(`Saved Messages`);
+
 db.queryEntries("SELECT * FROM message;").forEach((message) => {
   console.log(`id : ${message.id} | content : ${message.content}`);
 });

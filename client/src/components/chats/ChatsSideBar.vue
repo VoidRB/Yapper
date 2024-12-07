@@ -1,6 +1,7 @@
 <script setup>
+import axios from "axios";
 import { Socket } from "socket.io-client";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 
 const usersList = ref([]);
 const savedUser = ref("");
@@ -9,43 +10,53 @@ const props = defineProps({
   socket: Socket,
 });
 
+sideBarStatus.value = false;
+
 savedUser.value = JSON.parse(
   sessionStorage.getItem("Login-user-data") ||
-    sessionStorage.getItem("Register-user-data"),
+    localStorage.getItem("Register-user-data"),
 );
 
-const chatWithPickedUser = (user) => {
-  props.socket.on("private message", {});
-};
-
-props.socket.on("users", (users) => {
-  usersList.value = users;
+onMounted(async () => {
+  try {
+    const response = await axios.get("/api/login/all");
+    console.log(response.data);
+    usersList.value = response.data.users;
+  } catch (error) {
+    throw error;
+  }
 });
 
-sideBarStatus.value = false;
+const chatWithPickedUser = (user) => {};
+
+const toggleClass = (element, addClasses, removeClasses) => {
+  element.classList.add(...addClasses);
+  element.classList.remove(...removeClasses);
+};
+
 const sideBarVisibility = () => {
   const sidebar = document.getElementById("sidebar");
   const sidebarButton = document.getElementById("sidebarButton");
-  if (sideBarStatus.value) {
-    sidebar.classList.remove("translate-x-0");
-    sidebar.classList.add("-translate-x-full");
-    sidebarButton.classList.add("pi-users");
-    sidebarButton.classList.remove("pi-times", "rotate-90");
+  const status = sideBarStatus.value;
 
-    sideBarStatus.value = false;
-  } else {
-    sidebar.classList.add("translate-x-0");
-    sidebar.classList.remove("-translate-x-full");
-    sidebarButton.classList.remove("pi-users");
-    sidebarButton.classList.add("pi-times", "rotate-90");
-    sideBarStatus.value = true;
-  }
+  toggleClass(
+    sidebar,
+    status ? ["-translate-x-full"] : ["translate-x-0"],
+    status ? ["translate-x-0"] : ["-translate-x-full"],
+  );
+  toggleClass(
+    sidebarButton,
+    status ? ["pi-users"] : ["pi-times", "rotate-90"],
+    status ? ["pi-times", "rotate-90"] : ["pi-users"],
+  );
+
+  sideBarStatus.value = !status;
 };
 </script>
 <template>
   <button
-    class="absolute bottom-7 left-4 z-10 flex size-12 items-center justify-center rounded-full text-3xl font-extrabold text-CLACCPrimary shadow-2xl ring-2 ring-CLACCPrimary hover:bg-white hover:bg-opacity-20 hover:shadow-black focus:text-CLACCSecondary focus:outline-none active:bg-none active:text-CLACCSecondary active:shadow-inner active:ring-CLACCSecondary lg:hidden dark:border-CDACCPrimary dark:text-CDACCPrimary dark:ring-CDACCPrimary dark:focus:text-CDACCSecondary dark:active:border-CDACCSecondary dark:active:text-CDACCSecondary dark:active:ring-CDACCSecondary"
-    @click="sideBarVisibility()"
+    class="absolute bottom-7 left-4 z-10 flex size-12 items-center justify-center rounded-full text-3xl font-extrabold text-CLACCPrimary shadow-2xl shadow-black ring-2 ring-CLACCPrimary hover:bg-white hover:bg-opacity-20 focus:text-CLACCSecondary focus:outline-none active:bg-none active:text-CLACCSecondary active:shadow-inner active:ring-CLACCSecondary lg:hidden dark:border-CDACCPrimary dark:text-CDACCPrimary dark:ring-CDACCPrimary dark:focus:text-CDACCSecondary dark:active:border-CDACCSecondary dark:active:text-CDACCSecondary dark:active:ring-CDACCSecondary"
+    @click="sideBarVisibility"
   >
     <i id="sidebarButton" class="pi pi-users transition-all"></i>
   </button>
@@ -56,7 +67,7 @@ const sideBarVisibility = () => {
     <h1
       class="my-3 text-center text-xl font-bold text-CLACCSecondary dark:text-CDACCSecondary"
     >
-      Online Users :
+      Users :
     </h1>
     <div
       v-for="user in usersList"

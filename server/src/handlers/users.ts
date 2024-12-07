@@ -21,9 +21,10 @@ export async function registerUser(ctx: Context): Promise<Response> {
         username,
         hashedPassword,
       });
+      const payload = { userId: user.id, username: user.username };
       const token = await create(
         { alg: "HS512", typ: "JWT" },
-        { userId: user.id, exp: getNumericDate(60 * 30) },
+        { payload, exp: getNumericDate(60 * 30) },
         ENCRYPTION_KEY,
       );
       // TODO: session must be securely stored (client) and properly expired
@@ -36,7 +37,6 @@ export async function registerUser(ctx: Context): Promise<Response> {
       ctx.response.body = {
         success: true,
         message: "User created",
-        name: user.username,
         token,
       };
 
@@ -65,9 +65,10 @@ export async function loginUser(ctx: Context): Promise<Response> {
       if (!passwordMatch) {
         throw new Error("Invalid credentials");
       }
+      const payload = { userId: user.id, username: user.username };
       const token = await create(
         { alg: "HS512", typ: "JWT" },
-        { userId: user.id },
+        { payload, exp: getNumericDate(60 * 30) },
         ENCRYPTION_KEY,
       );
 
@@ -84,7 +85,6 @@ export async function loginUser(ctx: Context): Promise<Response> {
       ctx.response.body = {
         success: true,
         message: "User logged in",
-        name: user.username,
         token,
       };
       return ctx.response;

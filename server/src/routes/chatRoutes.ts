@@ -1,6 +1,6 @@
 import { Context, Router } from "@oak/oak";
 import { getAllMessages } from "../handlers/messages.ts";
-import { authMiddleware } from "../middleware/oakAuth.ts";
+import { authMiddleware } from "../middleware/oakAuthMiddleware.ts";
 
 const router = new Router();
 

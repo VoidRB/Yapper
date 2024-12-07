@@ -7,7 +7,9 @@ const onConnection = (socket: Socket) => {
   console.log(`socket user ${socket.id} connected`);
 
   const username = socket.handshake.auth.name;
-  const user = { socketId: socket.id, username: username };
+  const userId = socket.handshake.auth.userId;
+
+  const user = { socketId: socket.id, username: username, userId: userId };
 
   users.push(user);
   io.emit("users", users);

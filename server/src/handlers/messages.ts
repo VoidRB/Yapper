@@ -1,6 +1,6 @@
 // deno-lint-ignore-file no-explicit-any
 
-import { Context, Response } from "@oak/oak";
+import type { Context, Response } from "@oak/oak";
 import { MessageService } from "../../services/message/service.ts";
 import { verifyJwt } from "./sessions.ts";
 
@@ -91,5 +91,17 @@ export function getAllMessages(ctx: Context): Response {
     ctx.response.status = 400;
     ctx.response.body = { error: error.message };
     return ctx.response;
+  }
+}
+
+export function createMessage(content: string, from: number, to: number) {
+  try {
+    messageService.createMessage({
+      content: content,
+      fromUserId: from,
+      toUserId: to,
+    });
+  } catch (error) {
+    throw error;
   }
 }

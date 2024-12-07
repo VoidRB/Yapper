@@ -28,5 +28,5 @@ export const getSingleUserByUsernameStatement = db.prepareQuery<
 >("SELECT * FROM users WHERE username = :username ;");
 
 export const getAllUsersStatement = db.prepareQuery<UserTuple, User>(
-  "SELECT * FROM users;",
+  "SELECT id,username FROM users;",
 );
