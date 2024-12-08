@@ -13,20 +13,30 @@ const props = defineProps({
   socket: Socket,
 });
 
-props.socket.on("sendallMSG", (msg) => {
-  texts.value.push(msg);
+props.socket.on("sendallMSG", (content) => {
+  texts.value.push(content);
+});
+
+props.socket.on("private message", ({ content, from, username }) => {
+  const text = { content, from, username };
+  texts.value.push(text);
+  console.log(texts.value);
 });
 
 props.socket.on("userConnId", (msg) => {
   userId.value = msg.id;
 });
-
-const SendMessage = () => {
+const sendMessage = () => {
   if (inputText.value.trim(" ")) {
-    if (store.user) {
-      props.socket.emit("Private Message");
-    } else {
+    if (Object.keys(store.user).length === 0) {
       props.socket.emit("newMessage", inputText.value);
+      console.log(`Sent global message`);
+    } else {
+      props.socket.emit("private message", {
+        content: inputText.value,
+        to: store.user.socketId,
+      });
+      console.log(`Sent private message to ${store.user.userId}`);
     }
   }
 };
@@ -40,7 +50,7 @@ const SendMessage = () => {
     <section class="my-5 flex h-16 w-full items-center justify-end">
       <div class="w-2/3 px-6 md:w-5/6 lg:w-full">
         <input
-          @keypress.enter="SendMessage(inputText)"
+          @keypress.enter="sendMessage()"
           @keyup.enter="inputText = ''"
           v-model="inputText"
           autofocus
@@ -50,7 +60,7 @@ const SendMessage = () => {
       </div>
       <div>
         <button
-          @click="(SendMessage(inputText), (inputText = ''))"
+          @click="(sendMessage(), (inputText = ''))"
           class="mr-5 flex size-12 items-center justify-center rounded-full border-b-2 border-CLACCPrimary text-CLACCPrimary shadow-2xl ring-2 ring-CLACCPrimary hover:bg-white hover:bg-opacity-20 hover:shadow-black focus:text-CLACCSecondary focus:outline-none active:border-b-0 active:border-t-2 active:border-CLACCSecondary active:bg-none active:text-CLACCSecondary active:shadow-inner active:ring-CLACCSecondary dark:border-CDACCPrimary dark:text-CDACCPrimary dark:ring-CDACCPrimary dark:focus:text-CDACCSecondary dark:active:border-CDACCSecondary dark:active:text-CDACCSecondary dark:active:ring-CDACCSecondary"
         >
           <i class="pi pi-send mr-0.5 mt-1 text-2xl"></i>

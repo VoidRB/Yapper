@@ -23,9 +23,8 @@ const onConnection = (socket: Socket) => {
     console.log(`User ${socket.id} disconnected reason : ${reason}`);
   });
 
-  socket.on("newMessage", (msg) => {
-    console.log(`new msg : ${msg}`);
-    io.emit("sendallMSG", { msg: msg, id: socket.id, username: username });
+  socket.on("newMessage", (content) => {
+    io.emit("sendallMSG", { msg: content, id: socket.id, username: username });
   });
 
   socket.on("private message", ({ content, to }) => {
