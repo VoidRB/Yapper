@@ -8,7 +8,6 @@ import { Server } from "socket.io";
 
 import { socketAuthMiddleware } from "../middleware/socketAuthMiddleware.ts";
 import onConnection from "../../services/chat/WebSocketActions.ts";
-import { socketUserMiddleware } from "../middleware/socketIdMiddleware.ts";
 
 const io = new Server({
   path: "/chat/",
@@ -19,7 +18,6 @@ const io = new Server({
 });
 
 io.use(socketAuthMiddleware);
-io.use(socketUserMiddleware);
 
 io.on("connection", onConnection);
 

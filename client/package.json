@@ -12,6 +12,7 @@
     "@zaubrik/djwt": "npm:@jsr/zaubrik__djwt@^3.0.2",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.8",
+    "pinia": "^2.3.0",
     "postcss": "^8.4.49",
     "primeicons": "^7.0.0",
     "socket.io-client": "^4.8.1",

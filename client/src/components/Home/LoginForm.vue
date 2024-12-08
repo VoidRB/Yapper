@@ -22,7 +22,6 @@ const login = async () => {
       password: chatPassword.value,
     });
     sessionStorage.setItem("Login-user-data", JSON.stringify(response.data));
-
     router.push({ name: "Chats" });
   } catch (error) {
     userError.value = true;
