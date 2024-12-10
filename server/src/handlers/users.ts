@@ -15,12 +15,12 @@ export async function registerUser(ctx: Context): Promise<Response> {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     const userExists = userService.getUserByUsername({ username: username });
-
     if (!userExists) {
       const user = userService.createUser({
         username,
         hashedPassword,
       });
+
       const payload = { userId: user.id, username: user.username };
       const token = await create(
         { alg: "HS512", typ: "JWT" },
@@ -56,7 +56,6 @@ export async function registerUser(ctx: Context): Promise<Response> {
 
 export async function loginUser(ctx: Context): Promise<Response> {
   const { username, password } = await ctx.request.body.json();
-
   try {
     const user = userService.getUserByUsername({ username: username });
 
@@ -105,4 +104,31 @@ export function getUsers(ctx: Context): Response {
   ctx.response.status = 200;
   ctx.response.body = { users };
   return ctx.response;
+}
+
+export async function logoutUser(ctx: Context) {
+  const { userId } = await ctx.request.body.json();
+  try {
+    const user = userService.getUserById({ id: userId });
+    const sessionExists = sessionService.getSingleSession({
+      userId: user.id,
+    });
+    if (sessionExists) {
+      sessionService.removeSession({ userId: user.id });
+
+      ctx.response.status = 200;
+      ctx.response.body = { success: true, message: "Session Terminated" };
+      return ctx.response;
+    }
+    ctx.response.status = 400;
+    ctx.response.body = {
+      success: false,
+      message: "Session Couldn't be Terminated",
+    };
+    return ctx.response;
+  } catch (error: any) {
+    ctx.response.status = 401;
+    ctx.response.body = { error: error.message };
+    return ctx.response;
+  }
 }

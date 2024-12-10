@@ -6,6 +6,9 @@ import TopBar from "@/components/TopBar.vue";
 <template>
   <div class="flex h-screen w-full flex-col">
     <TopBar />
-    <RouterView />
+    <Suspense>
+      <RouterView />
+      <template #fallback>Loading...</template>
+    </Suspense>
   </div>
 </template>

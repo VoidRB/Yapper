@@ -17,13 +17,14 @@ savedUser.value = JSON.parse(
     localStorage.getItem("Register-user-data"),
 );
 
-const [header, payload, signature] = decode(savedUser.value.token);
+const [header, payload, signature] = await decode(savedUser.value.token);
 
 props.socket.on("users", (users) => {
   usersList.value = users;
 });
 
 const chatWithPickedUser = (user) => {
+  props.socket.emit("clearTexts");
   store.setUser(user);
 };
 
@@ -54,33 +55,66 @@ const sideBarVisibility = () => {
 </script>
 <template>
   <button
-    class="absolute bottom-7 left-4 z-10 flex size-12 items-center justify-center rounded-full text-3xl font-extrabold text-CLACCPrimary shadow-2xl shadow-black ring-2 ring-CLACCPrimary hover:bg-white hover:bg-opacity-20 focus:text-CLACCSecondary focus:outline-none active:bg-none active:text-CLACCSecondary active:shadow-inner active:ring-CLACCSecondary lg:hidden dark:border-CDACCPrimary dark:text-CDACCPrimary dark:ring-CDACCPrimary dark:focus:text-CDACCSecondary dark:active:border-CDACCSecondary dark:active:text-CDACCSecondary dark:active:ring-CDACCSecondary"
+    class="absolute bottom-7 left-4 z-10 flex size-12 items-center justify-center rounded-full text-3xl font-extrabold text-CLACCPrimary shadow-2xl shadow-black ring-2 ring-CLACCPrimary transition-all hover:bg-white hover:bg-opacity-20 focus:text-CLACCSecondary focus:outline-none active:scale-110 active:bg-none active:text-CLACCSecondary active:shadow-inner active:ring-CLACCSecondary lg:hidden dark:border-CDACCPrimary dark:text-CDACCPrimary dark:ring-CDACCPrimary dark:focus:text-CDACCSecondary dark:active:border-CDACCSecondary dark:active:text-CDACCSecondary dark:active:ring-CDACCSecondary"
     @click="sideBarVisibility"
   >
-    <i id="sidebarButton" class="pi pi-users bg- transition-all"></i>
+    <i id="sidebarButton" class="pi pi-users transition-all"></i>
   </button>
-  <section
+  <div
     id="sidebar"
-    class="fixed z-0 h-full w-96 -translate-x-full flex-col border-r-2 border-CLACCPrimary bg-CLBGPrimary transition-all lg:relative lg:translate-x-0 lg:border-0 dark:border-CDACCPrimary dark:bg-CDBGPrimary"
+    class="fixed z-0 flex h-full w-full -translate-x-full flex-row transition-all lg:relative lg:w-96 lg:translate-x-0"
   >
-    <h1
-      class="my-3 text-center text-xl font-bold text-CLACCSecondary dark:text-CDACCSecondary"
+    <section
+      class="flex h-full w-3/4 flex-col border-r-2 border-CLACCPrimary bg-CLBGPrimary sm:w-1/2 md:w-1/2 lg:w-96 lg:border-0 dark:border-CDACCPrimary dark:bg-CDBGPrimary"
     >
-      Users :
-    </h1>
-    <div
-      v-for="user in usersList"
-      v-show="user.username !== payload.payload.username"
-      class="flex flex-col items-center"
-    >
+      <h1
+        class="my-3 text-center text-xl font-bold text-CLACCPrimary dark:text-CDACCPrimary"
+      >
+        Now Chatting
+        <span
+          v-if="store.getUserLength() === 0"
+          class="text-CLACCSecondary dark:text-CDACCSecondary"
+          ><span class="text-CLACCPrimary dark:text-CDACCPrimary">in</span>
+          General chat</span
+        >
+        <span v-else class="text-CLACCSecondary dark:text-CDACCSecondary"
+          >With {{ store.user.username }}</span
+        >
+      </h1>
       <button
-        @click.prevent="chatWithPickedUser(user)"
-        class="mb-2 w-1/2 cursor-pointer justify-center p-2 text-CLACCPrimary transition-all hover:text-CLACCSecondary dark:text-CDACCPrimary dark:hover:text-CDACCSecondary"
+        @click.prevent="store.user = {}"
+        class="mb-2 flex w-full cursor-pointer items-center justify-center p-2 text-CLACCPrimary transition-all hover:text-CLACCSecondary dark:text-CDACCPrimary dark:hover:text-CDACCSecondary"
       >
         <h1 class="overflow-ellipsis text-center capitalize">
-          {{ user.username }}
+          return to general Chat
         </h1>
       </button>
-    </div>
-  </section>
+      <hr
+        class="w-5/6 justify-center self-center border-CLACCPrimary dark:border-CDACCPrimary"
+      />
+      <h1
+        class="my-3 text-center text-xl font-bold text-CLACCSecondary dark:text-CDACCSecondary"
+      >
+        Online Users :
+      </h1>
+      <div
+        v-for="user in usersList"
+        v-show="user.username !== payload.payload.username"
+        class="flex flex-col items-center"
+      >
+        <button
+          @click.prevent="chatWithPickedUser(user)"
+          class="mb-2 w-1/2 cursor-pointer justify-center p-2 text-CLACCPrimary transition-all hover:text-CLACCSecondary dark:text-CDACCPrimary dark:hover:text-CDACCSecondary"
+        >
+          <h1 class="overflow-ellipsis text-center capitalize">
+            {{ user.username }}
+          </h1>
+        </button>
+      </div>
+    </section>
+    <section
+      class="h-full w-1/4 cursor-pointer sm:w-1/2 lg:hidden"
+      @click="sideBarVisibility"
+    ></section>
+  </div>
 </template>

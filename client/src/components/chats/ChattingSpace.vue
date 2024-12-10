@@ -1,5 +1,4 @@
 <script setup>
-//TODO fix the front-end and its navigation
 import { Socket } from "socket.io-client";
 import { ref } from "vue";
 import Messages from "./Messages.vue";
@@ -13,6 +12,10 @@ const props = defineProps({
   socket: Socket,
 });
 
+props.socket.on("clearTexts", () => {
+  texts.value = [];
+});
+
 props.socket.on("sendallMSG", (content) => {
   texts.value.push(content);
 });
@@ -20,23 +23,20 @@ props.socket.on("sendallMSG", (content) => {
 props.socket.on("private message", ({ content, from, username }) => {
   const text = { content, from, username };
   texts.value.push(text);
-  console.log(texts.value);
 });
 
-props.socket.on("userConnId", (msg) => {
-  userId.value = msg.id;
+props.socket.on("userConnId", (content) => {
+  userId.value = content.id;
 });
 const sendMessage = () => {
   if (inputText.value.trim(" ")) {
-    if (Object.keys(store.user).length === 0) {
+    if (store.getUserLength() === 0) {
       props.socket.emit("newMessage", inputText.value);
-      console.log(`Sent global message`);
     } else {
       props.socket.emit("private message", {
         content: inputText.value,
         to: store.user.socketId,
       });
-      console.log(`Sent private message to ${store.user.userId}`);
     }
   }
 };
@@ -46,9 +46,8 @@ const sendMessage = () => {
     class="flex size-full flex-col justify-between border-2 border-CLACCPrimary bg-CLBGSecondary shadow-inner shadow-black lg:w-5/6 dark:border-CDACCPrimary dark:bg-CDBGSecondary"
   >
     <Messages :texts="texts" :userId="userId" />
-    {{ store.user }}
     <section class="my-5 flex h-16 w-full items-center justify-end">
-      <div class="w-2/3 px-6 md:w-5/6 lg:w-full">
+      <div class="w-2/3 px-6 sm:w-4/5 md:w-5/6 lg:w-full">
         <input
           @keypress.enter="sendMessage()"
           @keyup.enter="inputText = ''"

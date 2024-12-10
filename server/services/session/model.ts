@@ -34,7 +34,12 @@ export const createSessionByUserIdSpec = z.object({
 export const removeSessionByUserIdSpec = z.object({
   userId: z.number(),
 });
+export const getSessionByUserIdSpec = z.object({
+  userId: z.number(),
+});
 
 export type CreateSessionByUserId = z.infer<typeof createSessionByUserIdSpec>;
 
 export type RemoveSessionByUserId = z.infer<typeof removeSessionByUserIdSpec>;
+
+export type GetSessionByUserId = z.infer<typeof getSessionByUserIdSpec>;

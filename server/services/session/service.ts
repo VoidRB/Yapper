@@ -1,6 +1,8 @@
 import {
   type CreateSessionByUserId,
   createSessionByUserIdSpec,
+  GetSessionByUserId,
+  getSessionByUserIdSpec,
   RemoveSessionByUserId,
   removeSessionByUserIdSpec,
 } from "./model.ts";
@@ -8,6 +10,7 @@ import {
 import {
   createSessionByUserStatement,
   getAllSessionsStatement,
+  getSessionByUserIdStatement,
   removeSessionByUserIdStatement,
 } from "./statements.ts";
 
@@ -33,6 +36,15 @@ export class SessionService {
       userId,
     });
     return removedSession;
+  }
+
+  getSingleSession(data: GetSessionByUserId) {
+    const { userId } = getSessionByUserIdSpec.parse(data);
+    const session = getSessionByUserIdStatement.allEntries({
+      userId,
+    });
+
+    return session;
   }
 
   getSessions() {

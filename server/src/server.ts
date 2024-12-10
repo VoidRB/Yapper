@@ -11,6 +11,8 @@ const port = Number(Deno.env.get("PORT")) || 5000;
 
 const app = new Application();
 
+app.use(userRouter.routes());
+
 app.use(oakCors());
 
 app.use(userRouter.routes());

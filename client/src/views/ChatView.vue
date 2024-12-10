@@ -11,7 +11,7 @@ user.value = JSON.parse(
     localStorage.getItem("Register-user-data"),
 );
 
-const [header, payload, signature] = decode(user.value.token);
+const [header, payload, signature] = await decode(user.value.token);
 
 const socket = io("http://localhost:5005", {
   path: "/chat/",

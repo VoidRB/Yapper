@@ -1,6 +1,11 @@
 import db from "../../db/db.ts";
 
-import type { RemoveSessionByUserId, Session, SessionTuple } from "./model.ts";
+import type {
+  GetSessionByUserId,
+  RemoveSessionByUserId,
+  Session,
+  SessionTuple,
+} from "./model.ts";
 import type { CreateSessionByUserId } from "./model.ts";
 
 export const createSessionByUserStatement = db.prepareQuery<
@@ -14,7 +19,13 @@ export const removeSessionByUserIdStatement = db.prepareQuery<
   SessionTuple,
   Session,
   RemoveSessionByUserId
->("DELETE from sessions where userId = :userId ;");
+>("DELETE FROM sessions WHERE userId = :userId ;");
+
+export const getSessionByUserIdStatement = db.prepareQuery<
+  SessionTuple,
+  Session,
+  GetSessionByUserId
+>("SELECT * FROM sessions WHERE userId = :userId ;");
 
 export const getAllSessionsStatement = db.prepareQuery<SessionTuple, Session>(
   "SELECT * FROM sessions ;",

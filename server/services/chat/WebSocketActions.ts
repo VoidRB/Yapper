@@ -11,10 +11,8 @@ const onConnection = (socket: Socket) => {
 
   const user = { socketId: socket.id, username: username, userId: userId };
 
-  users.push(user);
-  io.emit("users", users);
-
   io.to(socket.id).emit("userConnId", { id: socket.id });
+  users.push(user);
 
   socket.on("disconnect", (reason) => {
     const userindex = users.findIndex((u) => u === user);
@@ -22,15 +20,24 @@ const onConnection = (socket: Socket) => {
     io.emit("users", updatedUsers);
     console.log(`User ${socket.id} disconnected reason : ${reason}`);
   });
+  io.emit("users", users);
 
   socket.on("newMessage", (content) => {
-    io.emit("sendallMSG", { msg: content, id: socket.id, username: username });
+    io.emit("sendallMSG", {
+      content: content,
+      id: socket.id,
+      username: username,
+    });
   });
 
   socket.on("private message", ({ content, to }) => {
     socket
       .to(to)
       .emit("private message", { content, from: socket.id, username });
+  });
+
+  socket.on("clearTexts", () => {
+    socket.emit("clearTexts");
   });
 };
 
