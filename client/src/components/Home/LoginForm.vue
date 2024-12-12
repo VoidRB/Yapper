@@ -6,13 +6,14 @@ import { useRouter } from "vue-router";
 
 const chatUsername = ref("");
 const chatPassword = ref("");
-const userError = ref(Boolean);
+const userError = ref({});
+const apiResponse = ref({});
 
 const router = useRouter();
 
 onMounted(() => {
   sessionStorage.removeItem("Login-user-data");
-  userError.value = false;
+  userError.value = "";
 });
 
 const login = async () => {
@@ -23,15 +24,16 @@ const login = async () => {
     });
     sessionStorage.setItem("Login-user-data", JSON.stringify(response.data));
     router.push({ name: "Chats" });
+    apiResponse.value = response.data;
+    userError.value = "";
   } catch (error) {
-    userError.value = true;
+    userError.value = error.response.data.error;
     throw error;
   }
 };
 </script>
 <template>
-  <h1 v-if="userError" class="text-red-500">Wrong username or password</h1>
-  <h1 v-else>&nbsp;</h1>
+  <h1 class="text-red-500">{{ userError }}</h1>
   <form class="flex flex-col items-center gap-5">
     <input
       v-model="chatUsername"

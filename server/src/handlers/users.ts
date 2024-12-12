@@ -58,7 +58,15 @@ export async function loginUser(ctx: Context): Promise<Response> {
   const { username, password } = await ctx.request.body.json();
   try {
     const user = userService.getUserByUsername({ username: username });
+    const [sessionExists] = sessionService.getSingleSession({
+      userId: user.id,
+    });
+    if (sessionExists) {
+      ctx.response.status = 400;
+      ctx.response.body = { success: false, error: "User is logged in" };
 
+      return ctx.response;
+    }
     if (user) {
       const passwordMatch = await bcrypt.compare(password, user.hashedPassword);
       if (!passwordMatch) {
@@ -90,7 +98,7 @@ export async function loginUser(ctx: Context): Promise<Response> {
     }
 
     ctx.response.status = 400;
-    ctx.response.body = { success: false, message: "User doesn't exist" };
+    ctx.response.body = { success: false, error: "User doesn't exist" };
     return ctx.response;
   } catch (error: any) {
     ctx.response.status = 401;
@@ -110,7 +118,7 @@ export async function logoutUser(ctx: Context) {
   const { userId } = await ctx.request.body.json();
   try {
     const user = userService.getUserById({ id: userId });
-    const sessionExists = sessionService.getSingleSession({
+    const [sessionExists] = sessionService.getSingleSession({
       userId: user.id,
     });
     if (sessionExists) {

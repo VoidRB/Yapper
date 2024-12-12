@@ -5,38 +5,42 @@ import Messages from "./Messages.vue";
 import { useUserStore } from "@/stores/userStore";
 
 const store = useUserStore();
-const userId = ref("");
+const userSocketId = ref("");
 const inputText = ref("");
 const texts = ref([]);
 const props = defineProps({
   socket: Socket,
 });
 
-props.socket.on("clearTexts", () => {
+props.socket.on("message:clear", () => {
   texts.value = [];
 });
 
-props.socket.on("sendallMSG", (content) => {
+props.socket.on("message:global", (content) => {
   texts.value.push(content);
 });
 
-props.socket.on("private message", ({ content, from, username }) => {
-  const text = { content, from, username };
+props.socket.on("message:private", ({ content, from, username, toUserId }) => {
+  const text = { content, from, username, toUserId };
   texts.value.push(text);
+  console.log(text);
 });
 
-props.socket.on("userConnId", (content) => {
-  userId.value = content.id;
+props.socket.on("user:id", (content) => {
+  userSocketId.value = content.id;
 });
+
 const sendMessage = () => {
   if (inputText.value.trim(" ")) {
     if (store.getUserLength() === 0) {
-      props.socket.emit("newMessage", inputText.value);
+      props.socket.emit("message:global", inputText.value);
     } else {
-      props.socket.emit("private message", {
+      props.socket.emit("message:private", {
         content: inputText.value,
-        to: store.user.socketId,
+        toSocketId: store.user.socketId,
+        toUserId: store.user.userId,
       });
+      console.log(store.user);
     }
   }
 };
@@ -45,7 +49,7 @@ const sendMessage = () => {
   <div
     class="flex size-full flex-col justify-between border-2 border-CLACCPrimary bg-CLBGSecondary shadow-inner shadow-black lg:w-5/6 dark:border-CDACCPrimary dark:bg-CDBGSecondary"
   >
-    <Messages :texts="texts" :userId="userId" />
+    <Messages :texts="texts" :userSocketId="userSocketId" />
     <section class="my-5 flex h-16 w-full items-center justify-end">
       <div class="w-2/3 px-6 sm:w-4/5 md:w-5/6 lg:w-full">
         <input

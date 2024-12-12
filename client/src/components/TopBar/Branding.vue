@@ -7,16 +7,17 @@ import { decode } from "@zaubrik/djwt";
 const user = ref({});
 
 const logout = async () => {
-  user.value = JSON.parse(sessionStorage.getItem("Login-user-data"));
-  const [header, payload, signature] = await decode(user.value.token);
-  console.log(payload);
+  user.value = JSON.parse(
+    sessionStorage.getItem("Login-user-data") ||
+      localStorage.getItem("Register-user-data"),
+  );
+  const [_header, payload] = await decode(user.value.token);
   try {
-    const response = await axios.post(`/api/logout`, {
+    await axios.post(`/api/logout`, {
       userId: payload.payload.userId,
     });
-    console.log(response);
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 };
 </script>

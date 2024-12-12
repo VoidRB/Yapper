@@ -4,6 +4,8 @@ import ChattingSpace from "@/components/chats/ChattingSpace.vue";
 import { ref } from "vue";
 import { io } from "socket.io-client";
 import { decode } from "@zaubrik/djwt";
+import { onBeforeRouteLeave } from "vue-router";
+
 const user = ref({});
 
 user.value = JSON.parse(
@@ -11,7 +13,7 @@ user.value = JSON.parse(
     localStorage.getItem("Register-user-data"),
 );
 
-const [header, payload, signature] = await decode(user.value.token);
+const [_header, payload] = await decode(user.value.token);
 
 const socket = io("http://localhost:5005", {
   path: "/chat/",
@@ -22,6 +24,10 @@ const socket = io("http://localhost:5005", {
     name: payload.payload.username,
     userId: payload.payload.userId,
   },
+});
+
+onBeforeRouteLeave(() => {
+  socket.disconnect();
 });
 </script>
 

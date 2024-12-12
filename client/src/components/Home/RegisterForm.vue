@@ -2,37 +2,42 @@
 // TODO make this easier and more clearer to use for the user
 
 import axios from "axios";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
+const router = useRouter();
 const chatUsername = ref("");
 const chatPassword = ref("");
-const userError = ref(Boolean);
+const userError = ref({});
+const apiResponse = ref({});
 
-const router = useRouter();
+onMounted(() => {
+  userError.value = "";
+});
 
 const register = async () => {
-  if (chatUsername.value.length > 0 && chatPassword.value.length > 0) {
+  //FOR TESTING ONLY, RETURN TO 6 FOR PROD.
+  if (chatUsername.value.length >= 0 && chatPassword.value.length >= 0) {
     try {
       const response = await axios.post(`/api/register`, {
         username: chatUsername.value,
         password: chatPassword.value,
       });
+      apiResponse.value = response.data;
       localStorage.setItem("Register-user-data", JSON.stringify(response.data));
       router.push({ name: "Chats" });
     } catch (error) {
+      userError.value = error.response.data.error;
       throw error;
     }
   } else {
-    userError.value = false;
+    userError.value =
+      "Password And username must be more than 6 characters each";
   }
 };
 </script>
 <template>
-  <h1 v-if="!userError" class="text-red-500">
-    Username and password must be longer than 6 characters each
-  </h1>
-  <h1 v-else>&nbsp;</h1>
+  <h1 class="text-center text-red-500">{{ userError }}</h1>
   <form class="flex flex-col items-center gap-5">
     <input
       v-model="chatUsername"

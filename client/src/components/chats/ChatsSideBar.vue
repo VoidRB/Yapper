@@ -17,15 +17,19 @@ savedUser.value = JSON.parse(
     localStorage.getItem("Register-user-data"),
 );
 
-const [header, payload, signature] = await decode(savedUser.value.token);
+const [_header, payload] = await decode(savedUser.value.token);
 
-props.socket.on("users", (users) => {
+props.socket.on("users:all", (users) => {
   usersList.value = users;
 });
 
 const chatWithPickedUser = (user) => {
-  props.socket.emit("clearTexts");
+  props.socket.emit("message:clear");
   store.setUser(user);
+};
+const returnToGeneralChat = () => {
+  props.socket.emit("message:clear");
+  store.user = {};
 };
 
 const toggleClass = (element, addClasses, removeClasses) => {
@@ -55,14 +59,14 @@ const sideBarVisibility = () => {
 </script>
 <template>
   <button
-    class="absolute bottom-7 left-4 z-10 flex size-12 items-center justify-center rounded-full text-3xl font-extrabold text-CLACCPrimary shadow-2xl shadow-black ring-2 ring-CLACCPrimary transition-all hover:bg-white hover:bg-opacity-20 focus:text-CLACCSecondary focus:outline-none active:scale-110 active:bg-none active:text-CLACCSecondary active:shadow-inner active:ring-CLACCSecondary lg:hidden dark:border-CDACCPrimary dark:text-CDACCPrimary dark:ring-CDACCPrimary dark:focus:text-CDACCSecondary dark:active:border-CDACCSecondary dark:active:text-CDACCSecondary dark:active:ring-CDACCSecondary"
+    class="absolute bottom-7 left-4 z-10 flex size-12 items-center justify-center rounded-full text-3xl font-extrabold text-CLACCPrimary shadow-2xl shadow-black ring-2 ring-CLACCPrimary transition-all hover:bg-white hover:bg-opacity-20 focus:text-CLACCSecondary focus:outline-none active:scale-110 active:bg-none active:text-CLACCSecondary active:shadow-inner active:ring-CLACCSecondary lg:hidden dark:text-CDACCPrimary dark:ring-CDACCPrimary dark:focus:text-CDACCSecondary dark:active:text-CDACCSecondary dark:active:ring-CDACCSecondary"
     @click="sideBarVisibility"
   >
     <i id="sidebarButton" class="pi pi-users transition-all"></i>
   </button>
   <div
     id="sidebar"
-    class="fixed z-0 flex h-full w-full -translate-x-full flex-row transition-all lg:relative lg:w-96 lg:translate-x-0"
+    class="fixed z-0 flex h-full w-full -translate-x-full flex-row transition-all lg:relative lg:w-1/5 lg:translate-x-0"
   >
     <section
       class="flex h-full w-3/4 flex-col border-r-2 border-CLACCPrimary bg-CLBGPrimary sm:w-1/2 md:w-1/2 lg:w-96 lg:border-0 dark:border-CDACCPrimary dark:bg-CDBGPrimary"
@@ -82,7 +86,7 @@ const sideBarVisibility = () => {
         >
       </h1>
       <button
-        @click.prevent="store.user = {}"
+        @click="returnToGeneralChat"
         class="mb-2 flex w-full cursor-pointer items-center justify-center p-2 text-CLACCPrimary transition-all hover:text-CLACCSecondary dark:text-CDACCPrimary dark:hover:text-CDACCSecondary"
       >
         <h1 class="overflow-ellipsis text-center capitalize">
