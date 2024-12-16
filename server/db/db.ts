@@ -44,9 +44,12 @@ db.queryEntries("SELECT * FROM sessions;").forEach((session) => {
 
 console.log(`Saved Messages`);
 
-db.queryEntries("SELECT * FROM message;").forEach((message) => {
-  console.log(`id : ${message.id} | content : ${message.content}`);
-});
+// db.queryEntries("SELECT * FROM message;").forEach((message) => {
+// 	console.log(`to : ${message.toUserId} | from : ${message.fromUserId}`);
+// });
+
+console.log("# : " + db.queryEntries("SELECT * FROM message;").length);
+
 // db.close();
 
 export default db;

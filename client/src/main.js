@@ -16,7 +16,7 @@ app.use(pinia);
 
 app.mount("#app");
 
-this.window.addEventListener("beforeunload", async () => {
+window.addEventListener("beforeunload", async () => {
   const user = JSON.parse(
     sessionStorage.getItem("Login-user-data") ||
       localStorage.getItem("Register-user-data"),

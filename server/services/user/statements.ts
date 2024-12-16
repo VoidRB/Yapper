@@ -19,13 +19,13 @@ export const getSingleUserByIdStatement = db.prepareQuery<
   UserTuple,
   User,
   GetSingleUserById
->("SELECT * FROM users WHERE id = :id ;");
+>("SELECT id,username,hashedPassword FROM users WHERE id = :id ;");
 
 export const getSingleUserByUsernameStatement = db.prepareQuery<
   UserTuple,
   User,
   GetSingleUserByUsername
->("SELECT * FROM users WHERE username = :username ;");
+>("SELECT id,username,hashedPassword FROM users WHERE username = :username ;");
 
 export const getAllUsersStatement = db.prepareQuery<UserTuple, User>(
   "SELECT id,username FROM users;",

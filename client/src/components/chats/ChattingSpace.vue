@@ -4,7 +4,7 @@ import { ref } from "vue";
 import Messages from "./Messages.vue";
 import { useUserStore } from "@/stores/userStore";
 
-const store = useUserStore();
+const userStore = useUserStore();
 const userSocketId = ref("");
 const inputText = ref("");
 const texts = ref([]);
@@ -17,13 +17,26 @@ props.socket.on("message:clear", () => {
 });
 
 props.socket.on("message:global", (content) => {
-  texts.value.push(content);
+  if (userStore.getUserLength() > 0) {
+    console.log(userStore.getUserLength());
+    console.log(`User Exists`);
+  } else {
+    texts.value.push(content);
+    console.log(userStore.getUserLength());
+    console.log(`No User`);
+  }
 });
 
-props.socket.on("message:private", ({ content, from, username, toUserId }) => {
-  const text = { content, from, username, toUserId };
-  texts.value.push(text);
-  console.log(text);
+props.socket.on("message:private", ({ message, username }) => {
+  const text = { message, username };
+  if (userStore.getUserLength() > 0) {
+    console.log(userStore.getUserLength());
+    console.log(`User Exists`);
+    texts.value.push(text);
+  } else {
+    console.log(userStore.getUserLength());
+    console.log(`No User`);
+  }
 });
 
 props.socket.on("user:id", (content) => {
@@ -32,15 +45,14 @@ props.socket.on("user:id", (content) => {
 
 const sendMessage = () => {
   if (inputText.value.trim(" ")) {
-    if (store.getUserLength() === 0) {
+    if (userStore.getUserLength() === 0) {
       props.socket.emit("message:global", inputText.value);
     } else {
       props.socket.emit("message:private", {
         content: inputText.value,
-        toSocketId: store.user.socketId,
-        toUserId: store.user.userId,
+        toSocketId: userStore.user.socketId,
+        toUserId: userStore.user.userId,
       });
-      console.log(store.user);
     }
   }
 };
@@ -49,7 +61,11 @@ const sendMessage = () => {
   <div
     class="flex size-full flex-col justify-between border-2 border-CLACCPrimary bg-CLBGSecondary shadow-inner shadow-black lg:w-5/6 dark:border-CDACCPrimary dark:bg-CDBGSecondary"
   >
-    <Messages :texts="texts" :userSocketId="userSocketId" />
+    <Messages
+      :texts="texts"
+      :userSocketId="userSocketId"
+      :socket="props.socket"
+    />
     <section class="my-5 flex h-16 w-full items-center justify-end">
       <div class="w-2/3 px-6 sm:w-4/5 md:w-5/6 lg:w-full">
         <input

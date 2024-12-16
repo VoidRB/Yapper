@@ -6,16 +6,20 @@ export const getMessagesSentByUserStatement = db.prepareQuery<
   MessageTuple,
   Message,
   ListMessagesByUserId
->("SELECT * FROM message WHERE fromUserId = :userId;");
+>(
+  "SELECT id, fromUserId, toUserId, content FROM message WHERE fromUserId = :userId;",
+);
 
 export const getMessagesRecievedByUserStatement = db.prepareQuery<
   MessageTuple,
   Message,
   ListMessagesByUserId
->("SELECT * FROM message WHERE toUserId = :userId;");
+>(
+  "SELECT id, fromUserId, toUserId, content FROM message WHERE toUserId = :userId;",
+);
 
 export const getMessages = db.prepareQuery<MessageTuple, Message>(
-  "SELECT * FROM message ;",
+  "SELECT id, fromUserId, toUserId, content FROM message ;",
 );
 
 export const createMessage = db.prepareQuery<

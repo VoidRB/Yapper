@@ -7,10 +7,13 @@ export const useUserStore = defineStore("User-Store", () => {
   function setUser(incomingUser) {
     user.value = incomingUser;
   }
+  function getUser() {
+    return user.value;
+  }
 
   function getUserLength() {
     return Object.keys(user.value).length;
   }
 
-  return { setUser, getUserLength, user };
+  return { setUser, getUser, getUserLength, user };
 });

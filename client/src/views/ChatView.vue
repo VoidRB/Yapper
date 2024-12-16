@@ -1,12 +1,14 @@
 <script setup>
 import ChatsSideBar from "@/components/chats/ChatsSideBar.vue";
 import ChattingSpace from "@/components/chats/ChattingSpace.vue";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { io } from "socket.io-client";
 import { decode } from "@zaubrik/djwt";
 import { onBeforeRouteLeave } from "vue-router";
+import { useMessageStore } from "@/stores/messagesStore";
 
 const user = ref({});
+const store = useMessageStore();
 
 user.value = JSON.parse(
   sessionStorage.getItem("Login-user-data") ||
@@ -24,6 +26,11 @@ const socket = io("http://localhost:5005", {
     name: payload.payload.username,
     userId: payload.payload.userId,
   },
+});
+
+socket.on("message:all", ({ recievedMessages, sentMessages }) => {
+  store.setRecievedMessages(recievedMessages);
+  store.setSentMessages(sentMessages);
 });
 
 onBeforeRouteLeave(() => {

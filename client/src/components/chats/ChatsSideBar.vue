@@ -3,11 +3,15 @@ import { Socket } from "socket.io-client";
 import { ref } from "vue";
 import { decode } from "@zaubrik/djwt";
 import { useUserStore } from "@/stores/userStore";
+import { useMessageStore } from "@/stores/messagesStore";
 
-const store = useUserStore();
+const userstore = useUserStore();
+const messagestore = useMessageStore();
 const usersList = ref([]);
 const savedUser = ref("");
 const sideBarStatus = ref(Boolean);
+const fullTexts = ref([]);
+
 const props = defineProps({
   socket: Socket,
 });
@@ -18,18 +22,33 @@ savedUser.value = JSON.parse(
 );
 
 const [_header, payload] = await decode(savedUser.value.token);
-
 props.socket.on("users:all", (users) => {
   usersList.value = users;
 });
 
 const chatWithPickedUser = (user) => {
   props.socket.emit("message:clear");
-  store.setUser(user);
+  userstore.setUser(user);
+
+  messagestore.getRecievedMessages().filter((message) => {
+    if (message.fromUserId === user.userId) {
+      fullTexts.value.push(message);
+    }
+  });
+  messagestore.getSentMessages().filter((message) => {
+    if (message.toUserId === user.userId) {
+      fullTexts.value.push(message);
+    }
+  });
+  fullTexts.value.sort(function (a, b) {
+    return a.id - b.id || a.name.localeCompare(b.name);
+  });
+  messagestore.setFullConversation(fullTexts.value);
+  props.socket.emit("message:set");
 };
 const returnToGeneralChat = () => {
   props.socket.emit("message:clear");
-  store.user = {};
+  userstore.user = {};
 };
 
 const toggleClass = (element, addClasses, removeClasses) => {
@@ -45,8 +64,8 @@ const sideBarVisibility = () => {
 
   toggleClass(
     sidebar,
-    status ? ["-translate-x-full"] : ["translate-x-0"],
-    status ? ["translate-x-0"] : ["-translate-x-full"],
+    status ? ["-translate-x-full"] : ["translate-x-0"], //close
+    status ? ["translate-x-0"] : ["-translate-x-full"], //open
   );
   toggleClass(
     sidebarButton,
@@ -66,7 +85,7 @@ const sideBarVisibility = () => {
   </button>
   <div
     id="sidebar"
-    class="fixed z-0 flex h-full w-full -translate-x-full flex-row transition-all lg:relative lg:w-1/5 lg:translate-x-0"
+    class="fixed z-0 flex h-full w-full -translate-x-full flex-row transition-all duration-500 lg:relative lg:w-1/5 lg:translate-x-0"
   >
     <section
       class="flex h-full w-3/4 flex-col border-r-2 border-CLACCPrimary bg-CLBGPrimary sm:w-1/2 md:w-1/2 lg:w-96 lg:border-0 dark:border-CDACCPrimary dark:bg-CDBGPrimary"
@@ -76,13 +95,13 @@ const sideBarVisibility = () => {
       >
         Now Chatting
         <span
-          v-if="store.getUserLength() === 0"
+          v-if="userstore.getUserLength() === 0"
           class="text-CLACCSecondary dark:text-CDACCSecondary"
           ><span class="text-CLACCPrimary dark:text-CDACCPrimary">in</span>
           General chat</span
         >
         <span v-else class="text-CLACCSecondary dark:text-CDACCSecondary"
-          >With {{ store.user.username }}</span
+          >With {{ userstore.user.username }}</span
         >
       </h1>
       <button

@@ -37,7 +37,7 @@ const register = async () => {
 };
 </script>
 <template>
-  <h1 class="text-center text-red-500">{{ userError }}</h1>
+  <h1 class="text-center text-red-500">{{ userError }} &nbsp;</h1>
   <form class="flex flex-col items-center gap-5">
     <input
       v-model="chatUsername"

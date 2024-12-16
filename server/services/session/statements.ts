@@ -25,8 +25,10 @@ export const getSessionByUserIdStatement = db.prepareQuery<
   SessionTuple,
   Session,
   GetSessionByUserId
->("SELECT * FROM sessions WHERE userId = :userId ;");
+>(
+  "SELECT id, ip, userAgent, token, userId FROM sessions WHERE userId = :userId ;",
+);
 
 export const getAllSessionsStatement = db.prepareQuery<SessionTuple, Session>(
-  "SELECT * FROM sessions ;",
+  "SELECT id, ip, userAgent, token, userId FROM sessions ;",
 );

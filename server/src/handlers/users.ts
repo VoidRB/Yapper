@@ -127,12 +127,14 @@ export async function logoutUser(ctx: Context) {
       ctx.response.status = 200;
       ctx.response.body = { success: true, message: "Session Terminated" };
       return ctx.response;
+    } else {
+      ctx.response.status = 400;
+      ctx.response.body = {
+        success: false,
+        message: "Session Couldn't be Terminated",
+      };
     }
-    ctx.response.status = 400;
-    ctx.response.body = {
-      success: false,
-      message: "Session Couldn't be Terminated",
-    };
+
     return ctx.response;
   } catch (error: any) {
     ctx.response.status = 401;
