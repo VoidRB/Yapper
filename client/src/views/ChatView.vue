@@ -1,26 +1,27 @@
 <script setup>
 import ChatsSideBar from "@/components/chats/ChatsSideBar.vue";
 import ChattingSpace from "@/components/chats/ChattingSpace.vue";
-import { onMounted, ref } from "vue";
+import { onMounted } from "vue";
 import { io } from "socket.io-client";
 import { decode } from "@zaubrik/djwt";
 import { onBeforeRouteLeave } from "vue-router";
 import { useMessageStore } from "@/stores/messagesStore";
+import { useCurrentUserStore } from "@/stores/currentUserStore";
 
-const user = ref({});
-const store = useMessageStore();
+const messagesStore = useMessageStore();
+const currentUserStore = useCurrentUserStore();
 
-user.value = JSON.parse(
+const token = JSON.parse(
   sessionStorage.getItem("Login-user-data") ||
     localStorage.getItem("Register-user-data"),
 );
 
-const [_header, payload] = await decode(user.value.token);
+const [_header, payload] = await decode(token.token);
 
 const socket = io("http://localhost:5005", {
   path: "/chat/",
   extraHeaders: {
-    Authorization: `Bearer ${user.value.token}`,
+    Authorization: `Bearer ${token.token}`,
   },
   auth: {
     name: payload.payload.username,
@@ -28,9 +29,15 @@ const socket = io("http://localhost:5005", {
   },
 });
 
+onMounted(() => {
+  currentUserStore.setCurrentUser({
+    user: payload.payload,
+  });
+});
+
 socket.on("message:all", ({ recievedMessages, sentMessages }) => {
-  store.setRecievedMessages(recievedMessages);
-  store.setSentMessages(sentMessages);
+  messagesStore.setRecievedMessages(recievedMessages);
+  messagesStore.setSentMessages(sentMessages);
 });
 
 onBeforeRouteLeave(() => {

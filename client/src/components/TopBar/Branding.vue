@@ -1,17 +1,14 @@
 <script setup>
 import axios from "axios";
-import { ref } from "vue";
 import { RouterLink } from "vue-router";
 import { decode } from "@zaubrik/djwt";
 
-const user = ref({});
-
 const logout = async () => {
-  user.value = JSON.parse(
+  const token = JSON.parse(
     sessionStorage.getItem("Login-user-data") ||
       localStorage.getItem("Register-user-data"),
   );
-  const [_header, payload] = await decode(user.value.token);
+  const [_header, payload] = await decode(token.token);
   try {
     await axios.post(`/api/logout`, {
       userId: payload.payload.userId,

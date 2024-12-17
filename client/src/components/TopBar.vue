@@ -4,17 +4,11 @@ import { useRoute } from "vue-router";
 import ProfileButton from "./TopBar/ProfileButton.vue";
 import Branding from "./TopBar/Branding.vue";
 const theme = ref(Boolean);
-const user = ref("");
 
 const activeLink = (routePath) => {
   const route = useRoute();
   return route.path === routePath;
 };
-
-user.value = JSON.parse(
-  sessionStorage.getItem("Login-user-data") ||
-    sessionStorage.getItem("Register-user-data"),
-);
 
 const switchTheme = () => {
   let themeState = JSON.parse(localStorage.getItem("theme"));

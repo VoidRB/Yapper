@@ -6,14 +6,14 @@ import { useRouter } from "vue-router";
 
 const chatUsername = ref("");
 const chatPassword = ref("");
-const userError = ref({});
+const apiError = ref({});
 const apiResponse = ref({});
 
 const router = useRouter();
 
 onMounted(() => {
   sessionStorage.removeItem("Login-user-data");
-  userError.value = "";
+  apiError.value = "";
 });
 
 const login = async () => {
@@ -25,15 +25,15 @@ const login = async () => {
     sessionStorage.setItem("Login-user-data", JSON.stringify(response.data));
     router.push({ name: "Chats" });
     apiResponse.value = response.data;
-    userError.value = "";
+    apiError.value = "";
   } catch (error) {
-    userError.value = error.response.data.error;
+    apiError.value = error.response.data.error;
     throw error;
   }
 };
 </script>
 <template>
-  <h1 class="text-red-500">{{ userError }}&nbsp;</h1>
+  <h1 class="text-red-500">{{ apiError }}&nbsp;</h1>
   <form class="flex flex-col items-center gap-5">
     <input
       v-model="chatUsername"

@@ -5,7 +5,7 @@ import { decode } from "@zaubrik/djwt";
 import { useUserStore } from "@/stores/userStore";
 import { useMessageStore } from "@/stores/messagesStore";
 
-const userstore = useUserStore();
+const userStore = useUserStore();
 const messagestore = useMessageStore();
 const usersList = ref([]);
 const savedUser = ref("");
@@ -28,7 +28,7 @@ props.socket.on("users:all", (users) => {
 
 const chatWithPickedUser = (user) => {
   props.socket.emit("message:clear");
-  userstore.setUser(user);
+  userStore.setUser(user);
 
   messagestore.getRecievedMessages().filter((message) => {
     if (message.fromUserId === user.userId) {
@@ -41,14 +41,14 @@ const chatWithPickedUser = (user) => {
     }
   });
   fullTexts.value.sort(function (a, b) {
-    return a.id - b.id || a.name.localeCompare(b.name);
+    return a.id - b.id;
   });
-  messagestore.setFullConversation(fullTexts.value);
-  props.socket.emit("message:set");
+  props.socket.emit("message:set", fullTexts.value);
 };
+
 const returnToGeneralChat = () => {
   props.socket.emit("message:clear");
-  userstore.user = {};
+  userStore.user = {};
 };
 
 const toggleClass = (element, addClasses, removeClasses) => {
@@ -95,13 +95,13 @@ const sideBarVisibility = () => {
       >
         Now Chatting
         <span
-          v-if="userstore.getUserLength() === 0"
+          v-if="userStore.getUserLength() === 0"
           class="text-CLACCSecondary dark:text-CDACCSecondary"
           ><span class="text-CLACCPrimary dark:text-CDACCPrimary">in</span>
           General chat</span
         >
         <span v-else class="text-CLACCSecondary dark:text-CDACCSecondary"
-          >With {{ userstore.user.username }}</span
+          >With {{ userStore.user.username }}</span
         >
       </h1>
       <button

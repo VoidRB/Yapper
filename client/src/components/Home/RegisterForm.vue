@@ -8,11 +8,11 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 const chatUsername = ref("");
 const chatPassword = ref("");
-const userError = ref({});
+const apiError = ref({});
 const apiResponse = ref({});
 
 onMounted(() => {
-  userError.value = "";
+  apiError.value = "";
 });
 
 const register = async () => {
@@ -27,17 +27,17 @@ const register = async () => {
       localStorage.setItem("Register-user-data", JSON.stringify(response.data));
       router.push({ name: "Chats" });
     } catch (error) {
-      userError.value = error.response.data.error;
+      apiError.value = error.response.data.error;
       throw error;
     }
   } else {
-    userError.value =
+    apiError.value =
       "Password And username must be more than 6 characters each";
   }
 };
 </script>
 <template>
-  <h1 class="text-center text-red-500">{{ userError }} &nbsp;</h1>
+  <h1 class="text-center text-red-500">{{ apiError }} &nbsp;</h1>
   <form class="flex flex-col items-center gap-5">
     <input
       v-model="chatUsername"

@@ -2,6 +2,7 @@
 import { Socket } from "socket.io";
 import io from "../../src/handlers/chat.ts";
 import { MessageService } from "../message/service.ts";
+import { Room } from "https://deno.land/x/socket_io@0.2.0/packages/socket.io/lib/adapter.ts";
 
 const users: object[] = [];
 const messageService = new MessageService();
@@ -18,9 +19,11 @@ const onConnection = (socket: Socket) => {
   const recievedMessages = messageService.getMessagesRecievedByUser({
     userId: user.userId,
   });
+
   const sentMessages = messageService.getMessagesSentByUser({
     userId: user.userId,
   });
+
   io.to(socket.id).emit("message:all", { recievedMessages, sentMessages });
 
   users.push(user);
@@ -31,33 +34,38 @@ const onConnection = (socket: Socket) => {
     io.emit("users:all", updatedUsers);
     console.log(`User ${socket.id} disconnected reason : ${reason}`);
   };
+
   const globalMessage = (content: any) => {
-    const message = {
-      content: content,
-      id: socket.id,
-    };
     io.emit("message:global", {
-      message,
-      username: user.username,
+      content: content.content,
+      id: socket.id,
+      fromUserId: user.userId,
+      toUserId: content.toUserId,
     });
   };
-  const privateMessage = ({ content, toSocketId, toUserId }: any) => {
+  const privateMessage = (sentMessage: {
+    content: string;
+    toUserId: number;
+    toSocketId: Room | Room[];
+  }) => {
     const message = {
-      content: String(content),
+      content: sentMessage.content,
       fromUserId: user.userId,
-      toUserId: Number(toUserId),
+      toUserId: sentMessage.toUserId,
     };
-    socket
-      .to(toSocketId)
-      .emit("message:private", { message, username: user.username });
+    console.log(message);
     messageService.createMessage(message);
+    socket.to(sentMessage.toSocketId).emit("message:private", message);
   };
+
   const clearMessages = () => {
     socket.emit("message:clear");
   };
-  const setMessages = () => {
-    socket.emit("message:set");
+
+  const setMessages = (fullConvo: object) => {
+    socket.emit("message:set", fullConvo);
   };
+
   io.to(socket.id).emit("user:id", { id: socket.id });
   io.emit("users:all", users);
   socket.on("disconnect", disconnect);

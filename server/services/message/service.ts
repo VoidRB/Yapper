@@ -35,7 +35,11 @@ export class MessageService {
     const { fromUserId, toUserId, content } = createMessageByUserIdSpec.parse(
       data,
     );
-    const message = createMessage.allEntries({ fromUserId, toUserId, content });
+    const message = createMessage.allEntries({
+      fromUserId,
+      toUserId,
+      content,
+    });
     return message;
   }
 }

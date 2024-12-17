@@ -5,7 +5,7 @@ import Messages from "./Messages.vue";
 import { useUserStore } from "@/stores/userStore";
 
 const userStore = useUserStore();
-const userSocketId = ref("");
+const user = ref({});
 const inputText = ref("");
 const texts = ref([]);
 const props = defineProps({
@@ -16,56 +16,61 @@ props.socket.on("message:clear", () => {
   texts.value = [];
 });
 
-props.socket.on("message:global", (content) => {
+props.socket.on("message:global", (message) => {
+  console.log(message);
   if (userStore.getUserLength() > 0) {
-    console.log(userStore.getUserLength());
     console.log(`User Exists`);
   } else {
-    texts.value.push(content);
-    console.log(userStore.getUserLength());
     console.log(`No User`);
+    texts.value.push(message);
   }
 });
 
-props.socket.on("message:private", ({ message, username }) => {
-  const text = { message, username };
+props.socket.on("message:private", (message) => {
+  user.value = userStore.getUser();
   if (userStore.getUserLength() > 0) {
-    console.log(userStore.getUserLength());
-    console.log(`User Exists`);
-    texts.value.push(text);
+    if (user.value.userId == message.fromUserId) {
+      console.log(`User Exists`);
+      texts.value.push(message);
+    }
   } else {
-    console.log(userStore.getUserLength());
     console.log(`No User`);
   }
-});
-
-props.socket.on("user:id", (content) => {
-  userSocketId.value = content.id;
 });
 
 const sendMessage = () => {
+  const message = {
+    content: inputText.value,
+    toSocketId: userStore.user.socketId,
+    toUserId: userStore.user.userId,
+  };
+
   if (inputText.value.trim(" ")) {
     if (userStore.getUserLength() === 0) {
-      props.socket.emit("message:global", inputText.value);
+      props.socket.emit("message:global", message);
     } else {
-      props.socket.emit("message:private", {
+      props.socket.emit("message:private", message);
+      texts.value.push({
         content: inputText.value,
         toSocketId: userStore.user.socketId,
         toUserId: userStore.user.userId,
+        fromUserId: props.socket.auth.userId,
+        fromUsername: props.socket.auth.username,
       });
     }
   }
 };
+props.socket.on("message:set", (fullConvo) => {
+  fullConvo.forEach((message) => {
+    texts.value.push(message);
+  });
+});
 </script>
 <template>
   <div
     class="flex size-full flex-col justify-between border-2 border-CLACCPrimary bg-CLBGSecondary shadow-inner shadow-black lg:w-5/6 dark:border-CDACCPrimary dark:bg-CDBGSecondary"
   >
-    <Messages
-      :texts="texts"
-      :userSocketId="userSocketId"
-      :socket="props.socket"
-    />
+    <Messages :texts="texts" :socket="props.socket" />
     <section class="my-5 flex h-16 w-full items-center justify-end">
       <div class="w-2/3 px-6 sm:w-4/5 md:w-5/6 lg:w-full">
         <input
