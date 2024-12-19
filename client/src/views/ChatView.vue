@@ -46,7 +46,7 @@ onBeforeRouteLeave(() => {
 </script>
 
 <template>
-  <div class="flex h-screen w-full justify-normal transition-all">
+  <div class="flex size-full justify-normal transition-all">
     <ChatsSideBar :socket="socket" />
     <ChattingSpace :socket="socket" />
   </div>

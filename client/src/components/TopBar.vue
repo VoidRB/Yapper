@@ -28,7 +28,7 @@ const switchTheme = () => {
 
 <template>
   <div class="h-24 w-full bg-CLBGPrimary transition-colors dark:bg-CDBGPrimary">
-    <div class="flex h-full w-full items-center justify-between px-10">
+    <div class="flex w-full items-center justify-between px-10">
       <Branding />
       <section class="flex items-center justify-center gap-4">
         <button

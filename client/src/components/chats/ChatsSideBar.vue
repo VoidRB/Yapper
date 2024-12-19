@@ -106,7 +106,7 @@ const sideBarVisibility = () => {
       </h1>
       <button
         @click="returnToGeneralChat"
-        class="mb-2 flex w-full cursor-pointer items-center justify-center p-2 text-CLACCPrimary transition-all hover:text-CLACCSecondary dark:text-CDACCPrimary dark:hover:text-CDACCSecondary"
+        class="mb-2 flex w-full cursor-pointer items-center justify-center p-2 text-CLACCPrimary transition-colors hover:text-CLACCSecondary focus:text-CLACCSecondary focus:outline-none dark:text-CDACCPrimary dark:hover:text-CDACCSecondary dark:focus:text-CDACCSecondary"
       >
         <h1 class="overflow-ellipsis text-center capitalize">
           return to general Chat
@@ -127,9 +127,9 @@ const sideBarVisibility = () => {
       >
         <button
           @click.prevent="chatWithPickedUser(user)"
-          class="mb-2 w-1/2 cursor-pointer justify-center p-2 text-CLACCPrimary transition-all hover:text-CLACCSecondary dark:text-CDACCPrimary dark:hover:text-CDACCSecondary"
+          class="mb-2 w-1/2 cursor-pointer justify-center p-2 text-CLACCPrimary transition-colors hover:text-CLACCSecondary focus:text-CLACCSecondary focus:outline-none dark:text-CDACCPrimary dark:hover:text-CDACCSecondary dark:focus:text-CDACCSecondary"
         >
-          <h1 class="overflow-ellipsis text-center capitalize">
+          <h1 class="text-center capitalize">
             {{ user.username }}
           </h1>
         </button>

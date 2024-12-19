@@ -1,8 +1,8 @@
-// deno-lint-ignore-file no-explicit-any
 import { Socket } from "socket.io";
 import io from "../../src/handlers/chat.ts";
 import { MessageService } from "../message/service.ts";
 import { Room } from "https://deno.land/x/socket_io@0.2.0/packages/socket.io/lib/adapter.ts";
+import type { DisconnectReason } from "./types.ts";
 
 const users: object[] = [];
 const messageService = new MessageService();
@@ -28,14 +28,14 @@ const onConnection = (socket: Socket) => {
 
   users.push(user);
 
-  const disconnect = (reason: any) => {
+  const disconnect = (reason: DisconnectReason) => {
     const userindex = users.findIndex((u) => u === user);
     const updatedUsers = users.splice(userindex, userindex);
     io.emit("users:all", updatedUsers);
     console.log(`User ${socket.id} disconnected reason : ${reason}`);
   };
 
-  const globalMessage = (content: any) => {
+  const globalMessage = (content: { content: string; toUserId: number }) => {
     io.emit("message:global", {
       content: content.content,
       id: socket.id,

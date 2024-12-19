@@ -22,7 +22,7 @@ const logout = async () => {
   <RouterLink
     @click="logout"
     :to="{ name: 'Home' }"
-    class="text-2xl font-bold text-CLACCPrimary drop-shadow-sm hover:text-CLACCSecondary focus:underline focus:outline-none md:ml-12 dark:text-CDACCPrimary hover:dark:text-CDACCSecondary"
+    class="py-6 text-2xl font-bold text-CLACCPrimary drop-shadow-sm hover:text-CLACCSecondary focus:underline focus:outline-none md:ml-12 dark:text-CDACCPrimary hover:dark:text-CDACCSecondary"
   >
     Yapper
   </RouterLink>
