@@ -16,7 +16,9 @@ const formState = ref(true);
       Welcome to
       <span class="text-CLACCSecondary dark:text-CDACCSecondary">Yapper </span>!
     </h1>
-    <label class="relative inline-flex cursor-pointer items-center">
+    <label
+      class="relative inline-flex cursor-pointer items-center transition-transform"
+    >
       <input
         type="checkbox"
         @click="formState = !formState"

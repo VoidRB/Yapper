@@ -4,9 +4,9 @@ import { MessageService } from "../message/service.ts";
 import { Room } from "https://deno.land/x/socket_io@0.2.0/packages/socket.io/lib/adapter.ts";
 import type { DisconnectReason } from "./types.ts";
 
-const users: object[] = [];
 const messageService = new MessageService();
 
+const users: object[] = [];
 const onConnection = (socket: Socket) => {
   console.log(`socket user ${socket.id} connected`);
 
@@ -41,8 +41,10 @@ const onConnection = (socket: Socket) => {
       id: socket.id,
       fromUserId: user.userId,
       toUserId: content.toUserId,
+      fromUsername: user.username,
     });
   };
+
   const privateMessage = (sentMessage: {
     content: string;
     toUserId: number;
@@ -53,9 +55,13 @@ const onConnection = (socket: Socket) => {
       fromUserId: user.userId,
       toUserId: sentMessage.toUserId,
     };
-    console.log(message);
     messageService.createMessage(message);
-    socket.to(sentMessage.toSocketId).emit("message:private", message);
+    socket.to(sentMessage.toSocketId).emit("message:private", {
+      content: sentMessage.content,
+      fromUserId: user.userId,
+      toUserId: sentMessage.toUserId,
+      fromUsername: user.username,
+    });
   };
 
   const clearMessages = () => {

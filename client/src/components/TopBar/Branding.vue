@@ -4,14 +4,14 @@ import { RouterLink } from "vue-router";
 import { decode } from "@zaubrik/djwt";
 
 const logout = async () => {
-  const token = JSON.parse(
+  const { token } = JSON.parse(
     sessionStorage.getItem("Login-user-data") ||
       localStorage.getItem("Register-user-data"),
   );
-  const [_header, payload] = await decode(token.token);
+  const [_header, { payload }] = await decode(token);
   try {
     await axios.post(`/api/logout`, {
-      userId: payload.payload.userId,
+      userId: payload.userId,
     });
   } catch (error) {
     throw error;

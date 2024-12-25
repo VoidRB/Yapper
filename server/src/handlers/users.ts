@@ -102,7 +102,7 @@ export async function loginUser(ctx: Context): Promise<Response> {
     return ctx.response;
   } catch (error: any) {
     ctx.response.status = 401;
-    ctx.response.body = { error: error.message };
+    ctx.response.body = { error: "User Doesn't Exist", message: error.message };
     return ctx.response;
   }
 }

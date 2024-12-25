@@ -36,9 +36,9 @@ if (localStorage.getItem("theme")) {
   const themestate = JSON.parse(localStorage.getItem("theme"));
 
   if (themestate === true) {
-    document.body.classList.remove("dark");
-  } else {
     document.body.classList.add("dark");
+  } else {
+    document.body.classList.remove("dark");
   }
 } else {
   localStorage.setItem("theme", true);

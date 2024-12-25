@@ -13,7 +13,6 @@ const props = defineProps({
 });
 
 props.socket.on("message:global", (message) => {
-  console.log(message);
   if (userStore.getUserLength() > 0) {
     console.log(`User Exists`);
   } else {
@@ -57,16 +56,21 @@ const sendMessage = () => {
   }
 };
 props.socket.on("message:set", (fullConvo) => {
+  texts.value = [];
   fullConvo.forEach((message) => {
     texts.value.push(message);
   });
 });
+
+props.socket.on("message:clear", () => {
+  texts.value = [];
+});
 </script>
 <template>
   <div
-    class="flex h-[91%] w-full flex-col-reverse justify-between border-2 border-CLACCPrimary bg-CLBGSecondary shadow-inner shadow-black lg:w-5/6 dark:border-CDACCPrimary dark:bg-CDBGSecondary"
+    class="flex h-full w-full flex-col-reverse justify-between border-2 border-CLACCPrimary bg-CLBGSecondary shadow-inner shadow-black lg:h-full lg:w-5/6 dark:border-CDACCPrimary dark:bg-CDBGSecondary"
   >
-    <section class="my-6 flex h-16 w-full items-center justify-end">
+    <section class="my-5 flex h-16 w-full items-center justify-end">
       <div class="w-2/3 px-6 sm:w-4/5 md:w-5/6 lg:w-full">
         <input
           @keypress.enter="sendMessage()"
@@ -86,6 +90,10 @@ props.socket.on("message:set", (fullConvo) => {
         </button>
       </div>
     </section>
-    <Messages :texts="texts" :socket="props.socket" />
+    <section
+      class="flex h-96 w-full flex-col-reverse overflow-y-scroll scroll-smooth px-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+    >
+      <Messages :texts="texts" :socket="props.socket" />
+    </section>
   </div>
 </template>

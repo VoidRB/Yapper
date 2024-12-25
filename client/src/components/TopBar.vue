@@ -11,34 +11,33 @@ const activeLink = (routePath) => {
 };
 
 const switchTheme = () => {
-  let themeState = JSON.parse(localStorage.getItem("theme"));
-  if (themeState === true) {
-    document.body.classList.add("dark");
-    theme.value = !theme.value;
-    JSON.stringify(localStorage.setItem("theme", theme.value));
-    console.log("To DarkMode");
-  } else {
-    document.body.classList.remove("dark");
-    theme.value = !theme.value;
-    JSON.stringify(localStorage.setItem("theme", theme.value));
-    console.log("To LightMode");
-  }
+  const themeState = JSON.parse(localStorage.getItem("theme"));
+  const newThemeState = !themeState;
+
+  document.body.classList.toggle("dark", newThemeState);
+  localStorage.setItem("theme", JSON.stringify(newThemeState));
+  theme.value = newThemeState;
+
+  console.log(newThemeState ? "To DarkMode" : "To LightMode");
 };
 </script>
 
 <template>
-  <div class="h-24 w-full bg-CLBGPrimary transition-colors dark:bg-CDBGPrimary">
-    <div class="flex w-full items-center justify-between px-10">
-      <Branding />
-      <section class="flex items-center justify-center gap-4">
-        <button
-          class="text-CLACCPrimary hover:text-CLACCSecondary focus:underline focus:outline-none dark:text-CDACCPrimary hover:dark:text-CDACCSecondary"
-          @click="switchTheme"
-        >
-          Switch Mode
-        </button>
+  <div
+    class="flex h-24 w-full items-center justify-between bg-CLBGPrimary px-10 transition-colors dark:bg-CDBGPrimary"
+  >
+    <Branding />
+    <section class="flex items-center justify-center gap-4">
+      <button
+        class="text-CLACCPrimary hover:text-CLACCSecondary focus:underline focus:outline-none dark:text-CDACCPrimary hover:dark:text-CDACCSecondary"
+        @click="switchTheme"
+      >
+        Switch Mode
+      </button>
+      <Suspense>
         <ProfileButton v-show="!activeLink('/')" />
-      </section>
-    </div>
+        <template #fallback><i class="pi pi-user"></i></template>
+      </Suspense>
+    </section>
   </div>
 </template>
