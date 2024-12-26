@@ -56,9 +56,15 @@ const register = async () => {
       class="rounded-lg bg-transparent p-2 text-center text-black outline-none outline-CLACCPrimary transition-all focus:scale-105 focus:bg-slate-50 focus:bg-opacity-20 focus:shadow-2xl focus:outline-CLACCSecondary dark:text-white dark:outline-CDACCPrimary focus:dark:outline-CDACCSecondary"
     />
 
-    <button
+    <!-- <button
       @click.prevent="register()"
       class="rounded-full border-b-2 border-CLACCPrimary p-2 px-3 text-CLACCPrimary shadow-lg ring-2 ring-CLACCPrimary transition-all hover:bg-white hover:bg-opacity-20 focus:bg-white focus:bg-opacity-20 focus:outline-none active:scale-95 active:border-b-0 active:border-t-2 active:border-CLACCSecondary active:bg-none active:text-CLACCSecondary active:shadow-inner active:ring-CLACCSecondary dark:border-CDACCPrimary dark:text-CDACCPrimary dark:ring-CDACCPrimary dark:active:border-CDACCSecondary dark:active:text-CDACCSecondary dark:active:ring-CDACCSecondary"
+    >
+      Register
+    </button> -->
+    <button
+      @click.prevent="register()"
+      class="rounded-full bg-CLACCSecondary p-2 px-3 text-white shadow-lg outline-none ring-2 ring-CLACCSecondary/50 transition-all focus:outline-4 focus:outline-white/40 active:scale-95 active:shadow-inner dark:bg-CDACCSecondary dark:ring-CDACCSecondary/50"
     >
       Register
     </button>

@@ -25,7 +25,7 @@ const formState = ref(true);
         class="peer sr-only"
       />
       <div
-        class="after: peer flex h-8 items-center gap-4 rounded-full bg-CLACCPrimary px-3 text-sm text-white after:absolute after:left-1 after:h-6 after:w-16 after:rounded-full after:bg-white after:bg-opacity-45 after:transition-all after:content-[''] peer-checked:bg-CLACCSecondary peer-checked:after:translate-x-full peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-white/40 dark:border-slate-600 dark:bg-CDACCPrimary dark:peer-checked:bg-CDACCSecondary"
+        class="after: peer flex h-8 items-center gap-4 rounded-full bg-CLACCPrimary px-3 text-sm text-white transition-all after:absolute after:left-1 after:h-6 after:w-16 after:rounded-full after:bg-white after:bg-opacity-45 after:transition-all after:content-[''] active:scale-95 peer-checked:bg-CLACCSecondary peer-checked:after:translate-x-full peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-white/40 dark:border-slate-600 dark:bg-CDACCPrimary dark:peer-checked:bg-CDACCSecondary"
       >
         <span>&nbsp;&nbsp;Login</span>
         <span>Register</span>
