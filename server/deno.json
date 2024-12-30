@@ -1,8 +1,19 @@
 {
   "tasks": {
-    "dev": "deno run -NER --env-file --watch main.ts"
+    "db": "deno run -A --unstable ./db/db.ts",
+    "dev": "deno run -A --watch ./src/server.ts"
   },
+  "nodeModulesDir": "auto",
   "imports": {
-    "ws": "npm:ws@^8.18.0"
+    "@oak/oak": "jsr:@oak/oak@^17.1.3",
+    "@std/crypto": "jsr:@std/crypto@^1.0.3",
+    "@std/dotenv": "jsr:@std/dotenv@^0.225.2",
+    "djwt": "jsr:@zaubrik/djwt@^3.0.2",
+    "sqlite": "https://deno.land/x/sqlite@v3.9.1/mod.ts",
+    "socket.io": "https://deno.land/x/socket_io@0.2.0/mod.ts",
+    "cors": "https://deno.land/x/cors@v1.2.2/mod.ts",
+    "zod": "https://deno.land/x/zod@v3.23.8/mod.ts",
+    "denoHttp": "https://deno.land/std@0.150.0/http/server.ts",
+    "bcrypt": "npm:bcrypt@^5.1.1"
   }
 }
